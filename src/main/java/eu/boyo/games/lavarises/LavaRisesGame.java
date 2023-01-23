@@ -62,8 +62,6 @@ public class LavaRisesGame extends Game {
         HashMap<Material, Material> theme = themes.get(themeNum);
         Bukkit.broadcastMessage(String.valueOf(theme));
 
-        // generate bottom section
-        clone()
         // generate each level
         for (int level=0; level<5; level++) {
             // get target coordinates

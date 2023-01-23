@@ -1,4 +1,4 @@
-package boyoeu.boyoeu;
+package eu.boyo;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;

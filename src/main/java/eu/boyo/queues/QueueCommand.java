@@ -5,9 +5,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.hbop.boyominigames.queues.Queue;
-import com.hbop.boyominigames.queues.Queues;
-
 public class QueueCommand implements CommandExecutor {
 
     @Override

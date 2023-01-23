@@ -57,13 +57,13 @@ public class LavaRisesGame extends Game {
     }
 
     private void generateMap() {
-        // generate bottom section
-
         // get random theme
         int themeNum = (int) (Math.random() * themes.size());
         HashMap<Material, Material> theme = themes.get(themeNum);
         Bukkit.broadcastMessage(String.valueOf(theme));
 
+        // generate bottom section
+        clone()
         // generate each level
         for (int level=0; level<5; level++) {
             // get target coordinates

@@ -4,3 +4,9 @@ main: boyoeu.boyoeu.BoyoEU
 api-version: 1.19
 authors: [ HB0P, Mysted ]
 description: Official BoyoEU Minecraft server plugin
+
+commands:
+  queue:
+    description: Adds player to the queue for a game
+    usage: /<command> <game>
+    aliases: join

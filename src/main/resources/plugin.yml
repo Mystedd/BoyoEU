@@ -1,0 +1,6 @@
+name: BoyoEU
+version: '${project.version}'
+main: boyoeu.boyoeu.BoyoEU
+api-version: 1.19
+authors: [ HB0P, Mysted ]
+description: Official BoyoEU Minecraft server plugin

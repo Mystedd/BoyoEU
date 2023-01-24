@@ -62,9 +62,10 @@ public class LavaRisesHelper {
         for (int x=-19; x<=19; x++) {
             for (int z=-19; z<=19; z++) {
                 Block spawnBlock = world.getBlockAt(x, y, z);
+                Block headBlock = world.getBlockAt(x, y+1, z);
                 Block standBlock = world.getBlockAt(x, y-1, z);
                 boolean supported = standBlock.getBlockData().isFaceSturdy(BlockFace.UP, BlockSupport.FULL);
-                if (spawnBlock.isEmpty() && supported) {
+                if (spawnBlock.isEmpty() && headBlock.isEmpty() && supported) {
                     Location location = new Location(world, x+0.5, y, z+0.5);
                     possibilities.add(location);
                 }

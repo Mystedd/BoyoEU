@@ -51,8 +51,8 @@ public class LavaRisesGame extends Game {
     private void createThemes() {
         HashMap<Material, Material> theme1 = new HashMap<>();
         // testing theme
-        theme1.put(Material.GRASS_BLOCK, Material.ACACIA_PLANKS);
-        theme1.put(Material.OAK_TRAPDOOR, Material.BIRCH_TRAPDOOR);
+        theme1.put(Material.GRASS_BLOCK, Material.NETHER_BRICKS);
+        theme1.put(Material.COBBLESTONE, Material.NETHERRACK);
         themes.add(theme1);
     }
 
@@ -83,7 +83,12 @@ public class LavaRisesGame extends Game {
     private void startGame() {
         world.setPVP(false);
         Location spawnPos = new Location(world,0,-52,0);
-        for (Player player : players.keySet()) player.teleport(spawnPos);
+        for (Player player : players.keySet()) {
+            player.setGameMode(GameMode.ADVENTURE);
+            player.setHealth(20);
+            player.setFoodLevel(20);
+            player.teleport(spawnPos);
+        }
 
         // begin the game in 30 secs
         getServer().getScheduler().runTaskLater(BoyoEU.plugin, new Runnable(){
@@ -138,24 +143,45 @@ public class LavaRisesGame extends Game {
 
     private void playerLosesLife(Player player) {
         int livesLeft = players.get(player);
-        if (livesLeft == 0) {
+        if (livesLeft <= 0) {
             return;
         }
 
+        player.setFireTicks(0);
+        player.setAllowFlight(true);
+        player.setFlying(true);
+        player.setInvisible(true);
+
+        player.teleport(new Location(world, 0, lavaLevel+10, 0));
+
         livesLeft--;
-        players.put(player, livesLeft);
+        players.put(player, -livesLeft); // negative lives signify respawning
+
         if (livesLeft == 0) {
             playerDies(player);
             return;
         }
         player.sendTitle("§4You died!", String.format("§6%d lives remaining", livesLeft), 10, 40, 10);
+
+        getServer().getScheduler().runTaskLater(BoyoEU.plugin, new Runnable(){
+            public void run(){
+                playerRespawns(player);
+            }
+        },60L);
+    }
+
+    private void playerRespawns(Player player) {
+        players.put(player, -(players.get(player))); // make lives left positive again
+
+        player.setAllowFlight(false);
+        player.setFlying(false);
+        player.setInvisible(false);
+
         Location spawnPos = LavaRisesHelper.getSpawn(lavaLevel+10);
         player.teleport(spawnPos);
     }
 
     private void playerDies(Player player) {
-        player.setGameMode(GameMode.SPECTATOR);
-        player.teleport(new Location(world, 0, lavaLevel+10, 0));
         player.sendTitle("§4You died!", "§6No lives remaining", 10, 40, 10);
         if (players.size() <= 1) {
             gameOver();

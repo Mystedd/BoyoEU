@@ -10,3 +10,7 @@ commands:
     description: Adds player to the queue for a game
     usage: /queue <game>
     aliases: join
+
+  forcestart:
+    description: Immediately starts the game that you are queued for
+    usage: /forcestart

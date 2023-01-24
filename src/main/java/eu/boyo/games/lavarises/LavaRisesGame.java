@@ -1,10 +1,10 @@
 package eu.boyo.games.lavarises;
 
 import eu.boyo.BoyoEU;
+import eu.boyo.games.ActiveGames;
 import eu.boyo.games.Game;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,7 +35,7 @@ public class LavaRisesGame extends Game {
     HashMap<Player, Integer> players = new HashMap<>();
     int lavaLevel = -61;
     ArrayList<HashMap<Material, Material>> themes = new ArrayList<>();
-    boolean isActive;
+    public boolean isActive;
 
     public LavaRisesGame(ArrayList<Player> newPlayers) {
         getServer().getPluginManager().registerEvents(new PlayerDeathEvent(), BoyoEU.plugin);
@@ -60,7 +60,9 @@ public class LavaRisesGame extends Game {
         // get random theme
         int themeNum = (int) (Math.random() * themes.size());
         HashMap<Material, Material> theme = themes.get(themeNum);
-        Bukkit.broadcastMessage(String.valueOf(theme));
+
+        // generate bottom section
+        LavaRisesHelper.clone(-70, -60, -20, -30, -51, 20, -20, -62, -20, theme);
 
         // generate each level
         for (int level=0; level<5; level++) {
@@ -74,44 +76,15 @@ public class LavaRisesGame extends Game {
             int dy = (level*20)-52;
             int dz = -20;
             // clone into place
-            clone(tx, ty, tz, tx+40, ty+19, tz+40, dx, dy, dz, theme);
-        }
-    }
-
-    private void clone(int x1, int y1, int z1, int x2, int y2, int z2, int x, int y, int z, HashMap<Material, Material> theme) {
-        // tx = lower northwestern coordinate of target
-        // sx = length/depth/height of target
-        // dx = lower northwestern coordinate of destination
-        for (int tx=x1, dx=x; tx<=x2; tx++, dx++) {
-            for (int ty=y1, dy=y; ty<=y2; ty++, dy++) {
-                for (int tz=z1, dz=z; tz<=z2; tz++, dz++) {
-                    Location target = new Location(world, tx, ty, tz);
-                    Location destination = new Location(world, dx, dy, dz);
-
-                    Material templateMaterial = world.getBlockAt(target).getType();
-                    Material material;
-                    if (theme.containsKey(templateMaterial)) {
-                        material = theme.get(templateMaterial);
-                    }
-                    else {
-                        material = templateMaterial;
-                    }
-
-                    BlockState data = world.getBlockState(target);
-                    data.setType(material);
-                    world.setBlockData(destination, data.getBlockData());
-                }
-            }
+            LavaRisesHelper.clone(tx, ty, tz, tx+40, ty+19, tz+40, dx, dy, dz, theme);
         }
     }
 
     private void startGame() {
         world.setPVP(false);
         Location spawnPos = new Location(world,0,-52,0);
+        for (Player player : players.keySet()) player.teleport(spawnPos);
 
-        for (Player player : players.keySet()) {
-            player.teleport(spawnPos);
-        }
         // begin the game in 30 secs
         getServer().getScheduler().runTaskLater(BoyoEU.plugin, new Runnable(){
             public void run(){
@@ -121,30 +94,46 @@ public class LavaRisesGame extends Game {
     }
 
     private void beginGame() {
+        if (!isActive) {
+            return;
+        }
+
         world.setPVP(true);
         // "Begin Game!" title
-        for (Player player : players.keySet()) player.sendTitle("Begin Game!", "", 10, 40, 10);
+        for (Player player : players.keySet()) player.sendTitle("§6Begin Game!", "", 10, 40, 10);
         raiseLava();
     }
 
     private void raiseLava() {
+        if (!isActive) {
+            return;
+        }
+
         lavaLevel++;
         for (int x=-19; x<=19; x++) {
             for (int z=-19; z<=19; z++) {
                 Block block = world.getBlockAt(x, lavaLevel, z);
-                if (!block.getType().isSolid()) {
+
+                if (block.getType().isAir()) {
                     block.setType(Material.LAVA);
                 }
             }
         }
-        // raise the lava again in 3 secs
-        if (isActive) {
-            getServer().getScheduler().runTaskLater(BoyoEU.plugin, new Runnable(){
-                public void run(){
-                    raiseLava();
-                }
-            }, 60L);
+
+        // check that no players have been covered by the lava
+        for (Player player : players.keySet()) {
+            int y = player.getLocation().getBlockY();
+            if (y <= lavaLevel) {
+                playerLosesLife(player);
+            }
         }
+
+        // raise the lava again in 3 secs
+        getServer().getScheduler().runTaskLater(BoyoEU.plugin, new Runnable() {
+            public void run() {
+                raiseLava();
+            }
+        }, 60L);
     }
 
     private void playerLosesLife(Player player) {
@@ -160,12 +149,43 @@ public class LavaRisesGame extends Game {
             return;
         }
         player.sendTitle("§4You died!", String.format("§6%d lives remaining", livesLeft), 10, 40, 10);
-        player.teleport(new Location(world, 0, -52, 0));
+        Location spawnPos = LavaRisesHelper.getSpawn(lavaLevel+10);
+        player.teleport(spawnPos);
     }
 
     private void playerDies(Player player) {
         player.setGameMode(GameMode.SPECTATOR);
         player.teleport(new Location(world, 0, lavaLevel+10, 0));
         player.sendTitle("§4You died!", "§6No lives remaining", 10, 40, 10);
+        if (players.size() <= 1) {
+            gameOver();
+        }
+    }
+
+    private void gameOver() {
+        isActive = false;
+
+        String winnerName = "No one";
+        for (Player player : players.keySet()) {
+            if (players.get(player) > 0) {
+                winnerName = player.getName();
+            }
+        }
+        for (Player player : players.keySet()) player.sendTitle("§4Game Over!", "§a"+winnerName+" won", 10, 40, 10);
+
+        // teleport back to lobby 5 secs later
+        getServer().getScheduler().runTaskLater(BoyoEU.plugin, new Runnable(){
+            public void run(){
+                killGame();
+            }
+        },100L);
+    }
+
+    private void killGame() {
+        World lobby = Bukkit.getWorld("lobby");
+        Location spawnPos = new Location(lobby,-36, 66, -13, -90, 0);
+        for (Player player : players.keySet()) player.teleport(spawnPos);
+
+        ActiveGames.killGame(this);
     }
 }

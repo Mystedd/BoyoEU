@@ -26,6 +26,11 @@ public abstract class Queue {
 
     public abstract void queueFull();
 
+    public void resetQueue() {
+        for (Player player : players) players.remove(player);
+        isFull = false;
+    }
+
     public void addPlayer(Player newPlayer) {
         if (!isFull) {
             players.add(newPlayer);

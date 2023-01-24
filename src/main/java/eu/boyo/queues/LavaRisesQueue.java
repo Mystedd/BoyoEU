@@ -7,11 +7,12 @@ import eu.boyo.games.lavarises.LavaRisesGame;
 public class LavaRisesQueue extends Queue {
 
     public LavaRisesQueue(String name) {
-        super(name, 1);
+        super(name, 5);
     }
 
     public void queueFull() {
         Game newGame = new LavaRisesGame(players);
         ActiveGames.addGame(newGame);
+        resetQueue();
     }
 }

@@ -7,10 +7,15 @@ description: Official BoyoEU Minecraft server plugin
 
 commands:
   queue:
-    description: Adds player to the queue for a game
+    description: Adds player to the queue for a game.
     usage: /queue <game>
     aliases: join
 
   forcestart:
-    description: Immediately starts the game that you are queued for
+    description: Immediately starts the game that you are queued for.
     usage: /forcestart
+
+  lobby:
+    usage: /lobby
+    description: Sends you back to the lobby.
+    aliases: [l, hub]

@@ -1,5 +1,6 @@
 package eu.boyo;
 
+import eu.boyo.lobby.LobbyCommand;
 import eu.boyo.queues.EntityClickEvent;
 import eu.boyo.queues.ForceStartCommand;
 import eu.boyo.queues.QueueCommand;
@@ -13,8 +14,12 @@ public final class BoyoEU extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
+
+        // Commands
         getCommand("queue").setExecutor(new QueueCommand());
         getCommand("forcestart").setExecutor(new ForceStartCommand());
+        getCommand("lobby").setExecutor(new LobbyCommand());
+
         getServer().getPluginManager().registerEvents(new EntityClickEvent(), this);
         Bukkit.getLogger().info("BoyoEU plugin loaded");
     }

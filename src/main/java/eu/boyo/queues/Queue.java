@@ -9,7 +9,7 @@ public abstract class Queue {
     String name;
     int capacity;
     boolean isFull = false;
-    ArrayList<Player> players = new ArrayList<Player>();
+    public ArrayList<Player> players = new ArrayList<Player>();
 
     public Queue(String newName) {
         name = newName;

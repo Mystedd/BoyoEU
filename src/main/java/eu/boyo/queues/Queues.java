@@ -3,6 +3,7 @@ package eu.boyo.queues;
 import java.util.HashMap;
 import java.util.Set;
 
+import eu.boyo.games.tag.TagQueue;
 import org.bukkit.entity.Player;
 
 public class Queues {
@@ -12,6 +13,7 @@ public class Queues {
 
     static {
         queues.put("lavarises", new LavaRisesQueue("Lava Rises"));
+        queues.put("tag", new TagQueue("Tag"));
         queueNames = queues.keySet();
     }
 

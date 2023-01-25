@@ -19,15 +19,17 @@ public class LobbyCommand implements CommandExecutor {
 
         Player player = (Player) sender;
         if (!(player == null)) {
+            joinLobby(player);
+        } else {
             Bukkit.getLogger().info("You have to be a player to execute this command!");
             return false;
-        } else {
-            joinLobby(player);
         }
         return true;
     }
 
     public void joinLobby(Player player) {
+
+        Bukkit.getLogger().info(player.getName() + " Joined");
 
         // Teleport Player
         Location spawnPos = new Location(Bukkit.getWorld("lobby"), 0, 65, 0, -90, 0 );

@@ -6,6 +6,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
+import java.util.Collection;
 
 public class LobbyCommand implements CommandExecutor {
 
@@ -18,6 +22,16 @@ public class LobbyCommand implements CommandExecutor {
         } else {
             Location spawnPos = new Location(Bukkit.getWorld("lobby"), 0, 65, 0, -90, 0 );
             player.teleport(spawnPos);
+            player.setAllowFlight(false);
+            player.setFlying(false);
+            player.setInvisible(false);
+
+            // Remove potion effects
+            Collection<PotionEffect> effects = player.getActivePotionEffects();
+            for (PotionEffect effect : effects) {
+                player.removePotionEffect(effect.getType());
+            }
+
         }
 
         return true;

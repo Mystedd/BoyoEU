@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
@@ -19,22 +20,29 @@ public class LobbyCommand implements CommandExecutor {
         Player player = (Player) sender;
         if (!(player == null)) {
             Bukkit.getLogger().info("You have to be a player to execute this command!");
+            return false;
         } else {
-            Location spawnPos = new Location(Bukkit.getWorld("lobby"), 0, 65, 0, -90, 0 );
-            player.teleport(spawnPos);
-            player.setAllowFlight(false);
-            player.setFlying(false);
-            player.setInvisible(false);
-
-            // Remove potion effects
-            Collection<PotionEffect> effects = player.getActivePotionEffects();
-            for (PotionEffect effect : effects) {
-                player.removePotionEffect(effect.getType());
-            }
-
+            joinLobby(player);
         }
-
         return true;
     }
+
+    public void joinLobby(Player player) {
+
+        // Teleport Player
+        Location spawnPos = new Location(Bukkit.getWorld("lobby"), 0, 65, 0, -90, 0 );
+        player.teleport(spawnPos);
+
+        player.setAllowFlight(false);
+        player.setFlying(false);
+        player.setInvisible(false);
+
+        // Remove potion effects
+        Collection<PotionEffect> effects = player.getActivePotionEffects();
+        for (PotionEffect effect : effects) {
+            player.removePotionEffect(effect.getType());
+        }
+    }
+
 
 }

@@ -7,8 +7,10 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.BlockSupport;
+import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class LavaRisesHelper {
@@ -45,28 +47,22 @@ public class LavaRisesHelper {
         }
     }
 
-    // get a valid spawn location above a y level
-    public static Location getSpawn(int y) {
-        Location location = null;
-        while (location == null) {
-            location = getSpawnOnLevel(y);
-            y++;
-        }
-        return location;
-    }
-
     // get a random valid spawn location on a specific y level
-    private static Location getSpawnOnLevel(int y) {
+    static Location getSpawnOnLevel(int y, LavaRisesMap map) {
         ArrayList<Location> possibilities = new ArrayList<>();
 
         for (int x=-19; x<=19; x++) {
-            for (int z=-19; z<=19; z++) {
+            for (int z=map.zPos+1; z<=map.zPos+39; z++) {
+                // check that the space is clear
                 Block spawnBlock = world.getBlockAt(x, y, z);
                 Block headBlock = world.getBlockAt(x, y+1, z);
                 Block standBlock = world.getBlockAt(x, y-1, z);
                 boolean supported = standBlock.getBlockData().isFaceSturdy(BlockFace.UP, BlockSupport.FULL);
-                if (spawnBlock.isEmpty() && headBlock.isEmpty() && supported) {
-                    Location location = new Location(world, x+0.5, y, z+0.5);
+                if (!(spawnBlock.isEmpty() && headBlock.isEmpty() && supported)) continue;
+                // check that there are no nearby entities
+                Location location = new Location(world, x+0.5, y, z+0.5);
+                Collection<Entity> entities = world.getNearbyEntities(location, 5, 5, 5);
+                if (entities.isEmpty()) {
                     possibilities.add(location);
                 }
             }

@@ -9,7 +9,6 @@ enum TagMode {
     FAMILY,
     HOT_POTATO
 }
-
 enum TagMap {
     RANDOM,
     JUNGLE,
@@ -21,8 +20,13 @@ public class TagSettings {
 
     TagWeapon weapon;
     TagMode mode;
+    TagMap map;
+    byte gracePeriod;
+    short gameLength;
+    boolean runnerPvp;
+    boolean tagbacks;
 
-    public TagSettings(TagWeapon weapon, TagMode mode) {
+    public TagSettings(TagWeapon weapon, TagMode mode, TagMap mapOverride, byte gracePeriod, short gameLength, boolean runnerPvp, boolean tagbacks) {
 
     }
 

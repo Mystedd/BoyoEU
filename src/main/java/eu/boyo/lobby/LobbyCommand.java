@@ -27,7 +27,7 @@ public class LobbyCommand implements CommandExecutor {
         return true;
     }
 
-    public void joinLobby(Player player) {
+    public static void joinLobby(Player player) {
 
         // Teleport Player
         Location spawnPos = new Location(Bukkit.getWorld("lobby"), 0, 65, 0, -90, 0 );

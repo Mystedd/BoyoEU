@@ -42,21 +42,15 @@ public class LavaRisesMap {
         return location;
     }
 
-    private HashMap<Material, Material> getTheme() {
-        ArrayList<HashMap<Material, Material>> themes = new ArrayList<>();
-        // testing theme
-        HashMap<Material, Material> theme1 = new HashMap<>();
-        theme1.put(Material.GRASS_BLOCK, Material.NETHER_BRICKS);
-        theme1.put(Material.COBBLESTONE, Material.NETHERRACK);
-        themes.add(theme1);
-        // get random theme
-        int themeNum = (int) (Math.random() * themes.size());
-        return themes.get(themeNum);
+    private LavaRisesTheme getRandomTheme() {
+        LavaRisesTheme[] themes = LavaRisesTheme.values();
+        byte choice = (byte) (Math.random() * themes.length);
+        return themes[choice];
     }
 
     public void generateMap() {
         // get random theme
-        HashMap<Material, Material> theme = getTheme();
+        HashMap<Material, Material> theme = getRandomTheme().getTheme();
 
         // generate bottom section
         LavaRisesHelper.clone(-70, -60, -20, -30, -51, 20, -20, -62, -20, theme);

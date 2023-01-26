@@ -7,12 +7,6 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.UUID;
 
-enum TagMap {
-    JUNGLE,
-    DESERT,
-    CONSTRUCTION_SITE
-}
-
 public class TagGame extends Game {
 
     public TagGame(ArrayList<Player> players) {

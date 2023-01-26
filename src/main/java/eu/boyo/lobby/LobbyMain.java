@@ -1,5 +1,7 @@
 package eu.boyo.lobby;
 
+import eu.boyo.lobby.LobbyCommand;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,7 +14,7 @@ public class LobbyMain  {
         public void onJoin(org.bukkit.event.player.PlayerJoinEvent event) {
             Player player = event.getPlayer();
 
-            new LobbyCommand().joinLobby(player);
+            LobbyCommand.joinLobby(player);
             Bukkit.getLogger().info(player.getName() + " Joined");
         }
     }

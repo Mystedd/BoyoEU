@@ -21,6 +21,7 @@ public final class BoyoEU extends JavaPlugin {
         getCommand("forcestart").setExecutor(new ForceStartCommand());
         getCommand("lobby").setExecutor(new LobbyCommand());
 
+        // Events
         getServer().getPluginManager().registerEvents(new EntityClickEvent(), this);
         getServer().getPluginManager().registerEvents(new LobbyMain.PlayerJoinEvent(), this);
 

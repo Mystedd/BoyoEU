@@ -10,6 +10,13 @@ enum TagMode {
     HOT_POTATO
 }
 
+enum TagMap {
+    RANDOM,
+    JUNGLE,
+    DESERT,
+    CONSTRUCTION_SITE
+}
+
 public class TagSettings {
 
     TagWeapon weapon;

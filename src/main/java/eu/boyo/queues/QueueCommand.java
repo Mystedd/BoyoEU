@@ -1,28 +1,9 @@
 package eu.boyo.queues;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
-import java.util.*;
-
 public class QueueCommand implements CommandExecutor {
-
-    public class QueueTabCompletion implements TabCompleter {
-
-        @Override
-        public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-            List<String> options = new ArrayList<>();
-            if (args.length == 1) {
-                options.add("lavarises");
-                options.add("tag");
-            }
-            return options;
-        }
-
-    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -73,6 +54,7 @@ public class QueueCommand implements CommandExecutor {
         player.sendMessage("§aSuccessfully joined queue for " + queueName);
         return true;
     }
+
 }
 
 

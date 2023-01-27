@@ -3,6 +3,7 @@ package eu.boyo.queues;
 import java.util.HashMap;
 import java.util.Set;
 
+import eu.boyo.games.lavarises.LavaRisesQueue;
 import eu.boyo.games.tag.TagQueue;
 import org.bukkit.entity.Player;
 

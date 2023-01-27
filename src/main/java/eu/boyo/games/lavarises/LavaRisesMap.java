@@ -14,8 +14,16 @@ public class LavaRisesMap {
     Location initialSpawnPos;
 
     public LavaRisesMap() {
+        // find a free z position
         for (int z=-20; true; z+=50) {
-            if (!usedPositions.contains(z)) {
+            boolean used = false;
+            for (int pos : usedPositions) {
+                if (z == pos) {
+                    used = true;
+                    break;
+                }
+            }
+            if (!used) {
                 zPos = z;
                 usedPositions.add(z);
                 break;
@@ -80,6 +88,17 @@ public class LavaRisesMap {
                     block.setType(Material.LAVA);
                 }
             }
+        }
+    }
+
+    public void remove() {
+        byte index = 0;
+        for (int pos : usedPositions) {
+            if (pos == zPos) {
+                usedPositions.remove(index);
+                break;
+            }
+            index++;
         }
     }
 }

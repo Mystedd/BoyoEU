@@ -1,8 +1,9 @@
-package eu.boyo.queues;
+package eu.boyo.games.lavarises;
 
 import eu.boyo.games.ActiveGames;
 import eu.boyo.games.Game;
 import eu.boyo.games.lavarises.LavaRisesGame;
+import eu.boyo.queues.Queue;
 
 public class LavaRisesQueue extends Queue {
 

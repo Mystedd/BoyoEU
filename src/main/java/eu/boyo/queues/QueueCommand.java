@@ -27,7 +27,7 @@ public class QueueCommand implements CommandExecutor {
         if (queueName.equalsIgnoreCase("leave")) {
             boolean success = Queues.removePlayer(player);
             if (success) {
-                player.sendMessage("§aSuccessfully left queue");
+                player.sendMessage("§5Successfully left queue");
             }
             else {
                 player.sendMessage("§cYou are not currently in a queue");

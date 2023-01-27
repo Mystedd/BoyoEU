@@ -1,8 +1,6 @@
 package eu.boyo;
 
 import eu.boyo.lobby.LobbyCommand;
-import eu.boyo.lobby.LobbyMain;
-import eu.boyo.queues.EntityClickEvent;
 import eu.boyo.queues.ForceStartCommand;
 import eu.boyo.queues.QueueCommand;
 import org.bukkit.Bukkit;
@@ -22,8 +20,9 @@ public final class BoyoEU extends JavaPlugin {
         getCommand("lobby").setExecutor(new LobbyCommand());
 
         // Events
-        getServer().getPluginManager().registerEvents(new EntityClickEvent(), this);
-        getServer().getPluginManager().registerEvents(new LobbyMain.PlayerJoinEvent(), this);
+        getServer().getPluginManager().registerEvents(new eu.boyo.queues.EntityClickEvent(), this);
+        getServer().getPluginManager().registerEvents(new eu.boyo.lobby.LobbyMain.PlayerJoinEvent(), this);
+        getServer().getPluginManager().registerEvents(new eu.boyo.games.duels.BlockClickEvent(), this);
 
         Bukkit.getLogger().info("BoyoEU plugin loaded");
     }

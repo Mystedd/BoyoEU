@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -55,6 +56,8 @@ public class LavaRisesGame extends Game {
             player.setGameMode(GameMode.ADVENTURE);
             player.setHealth(20);
             player.setFoodLevel(20);
+            player.getInventory().clear();
+            player.getInventory().setArmorContents(new ItemStack[4]);
             player.teleport(map.getInitialSpawnPos());
         }
 
@@ -102,6 +105,10 @@ public class LavaRisesGame extends Game {
     }
 
     private void playerLosesLife(Player player) {
+        if (!isActive) {
+            return;
+        }
+
         int livesLeft = players.get(player);
         if (livesLeft <= 0) {
             return;
@@ -190,6 +197,7 @@ public class LavaRisesGame extends Game {
             player.teleport(spawnPos);
         }
 
+        map.remove();
         ActiveGames.killGame(this);
     }
 }

@@ -20,7 +20,7 @@ public class TagGame extends Game {
     public static void startGame(TagSettings settings, ArrayList<Player> players) {
 
         if (settings.map == TagMap.RANDOM) {
-            int mapId = new Random().nextInt(0, 2);
+            int mapId = new Random().nextInt(2);
         }
     }
 

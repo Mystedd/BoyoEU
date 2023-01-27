@@ -43,6 +43,4 @@ public class LobbyCommand implements CommandExecutor {
             player.removePotionEffect(effect.getType());
         }
     }
-
-
 }

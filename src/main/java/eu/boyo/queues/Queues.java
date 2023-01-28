@@ -40,10 +40,10 @@ public class Queues {
         return null;
     }
 
-    public static boolean removePlayer(Player player) {
+    public static Queue removePlayer(Player player) {
         Queue queue = getPlayerQueue(player);
-        if (queue == null) return false;
+        if (queue == null) return null;
         queue.removePlayer(player);
-        return true;
+        return queue;
     }
 }

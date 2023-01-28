@@ -2,11 +2,14 @@ package eu.boyo.games.duels;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public enum DuelsKit {
@@ -47,7 +50,7 @@ public enum DuelsKit {
         items.put(35, cobblestone);
         // shields
         ItemStack shield = new ItemStack(Material.SHIELD);
-        items.put(-106, shield);
+        items.put(104, shield);
         items.put(14, shield);
         // pickaxe
         ItemStack pickaxe = new ItemStack(Material.DIAMOND_PICKAXE);
@@ -146,8 +149,8 @@ public enum DuelsKit {
         chestplate.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
         items.put(100, boots);
         // steak
-        ItemStack steak = new ItemStack(Material.COOKED_BEEF);
-        items.put(-106, steak);
+        ItemStack steak = new ItemStack(Material.COOKED_BEEF, 20);
+        items.put(104, steak);
         return items;
     }},
 
@@ -208,7 +211,7 @@ public enum DuelsKit {
         // speed
         ItemStack speed = new ItemStack(Material.SPLASH_POTION);
         data = (PotionMeta) speed.getItemMeta();
-        data.setBasePotionData(new PotionData(PotionType.STRENGTH, false, true));
+        data.setBasePotionData(new PotionData(PotionType.SPEED, false, true));
         speed.setItemMeta(data);
         int[] speedSlots = {8, 12, 14, 16, 29, 30, 31, 32, 33, 34, 35};
         for (int slot : speedSlots) items.put(slot, speed);
@@ -245,6 +248,62 @@ public enum DuelsKit {
         ItemStack shield = new ItemStack(Material.SHIELD);
         shield.addEnchantment(Enchantment.MENDING, 1);
         shield.addEnchantment(Enchantment.DURABILITY, 3);
+        items.put(104, shield);
+        return items;
+    }},
+
+    AXE("Axe + Shield", false) { public HashMap<Integer, ItemStack> getItems() {
+        HashMap<Integer, ItemStack> items = new HashMap<>();
+        // axe
+        ItemStack axe = new ItemStack(Material.DIAMOND_AXE);
+        items.put(0, axe);
+        // sword
+        ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
+        items.put(1, sword);
+        // crossbow
+        ItemStack crossbow = new ItemStack(Material.CROSSBOW);
+        items.put(2, crossbow);
+        // bow
+        ItemStack bow = new ItemStack(Material.BOW);
+        items.put(3, bow);
+        // arrows
+        ItemStack arrows = new ItemStack(Material.ARROW, 6);
+        items.put(4, arrows);
+        // helmet
+        ItemStack helmet = new ItemStack(Material.DIAMOND_HELMET);
+        items.put(103, helmet);
+        // chestplate
+        ItemStack chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
+        items.put(102, chestplate);
+        // leggings
+        ItemStack leggings = new ItemStack(Material.DIAMOND_LEGGINGS);
+        items.put(101, leggings);
+        // boots
+        ItemStack boots = new ItemStack(Material.DIAMOND_BOOTS);
+        items.put(100, boots);
+        // shield
+        ItemStack shield = new ItemStack(Material.SHIELD);
+        items.put(104, shield);
+        return items;
+    }},
+
+    RANDOM("Random", false) { public HashMap<Integer, ItemStack> getItems() {
+        HashMap<Integer, ItemStack> items = new HashMap<>();
+
+        ArrayList<Material> materials = new ArrayList<>();
+        for (Material material : Material.values()) {
+            if (material.isItem()) materials.add(material);
+        }
+
+        for (int slot=0; slot<=35; slot++) {
+            if (slot == 9) slot = 18;
+
+            int n = (int) (Math.random() * materials.size());
+            Material material = materials.get(n);
+            byte stack = (byte) (Math.random() * material.getMaxStackSize() + 1);
+            ItemStack item = new ItemStack(material, stack);
+            items.put(slot, item);
+        }
         return items;
     }};
 
@@ -262,8 +321,28 @@ public enum DuelsKit {
     public String getName() {
         return name;
     }
+
     public String getDisplayName() {
         return name + " duels";
+    }
+
+    public void giveItems(Player player) {
+        PlayerInventory inventory = player.getInventory();
+        HashMap<Integer, ItemStack> items = getItems();
+        for (int slot : items.keySet()) {
+            ItemStack item = items.get(slot);
+            if (0 <= slot && slot <= 35) inventory.setItem(slot, item);
+            else if (slot == 104) inventory.setItemInOffHand(item);
+            else if (slot == 103) inventory.setHelmet(item);
+            else if (slot == 102) inventory.setChestplate(item);
+            else if (slot == 101) inventory.setLeggings(item);
+            else if (slot == 100) inventory.setBoots(item);
+        }
+    }
+
+    public void giveItems(Player player1, Player player2) {
+        giveItems(player1);
+        giveItems(player2);
     }
 
     DuelsKit(String newName, boolean saturation) {

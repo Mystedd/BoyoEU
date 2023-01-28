@@ -1,12 +1,14 @@
 package eu.boyo.games.duels;
 
 import eu.boyo.games.ActiveGames;
+import eu.boyo.queues.Queue;
+import eu.boyo.queues.Queues;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class DuelsQueues {
+public class Duels1v1Queues {
 
     static HashMap<DuelsKit, Player> queues = new HashMap<>();
 
@@ -17,18 +19,27 @@ public class DuelsQueues {
     }
 
     public static void addPlayer(Player player, DuelsKit kit) {
+        // check if the player is queued for any other games
+        Queue gameQueue = Queues.getPlayerQueue(player);
+        if (gameQueue != null) {
+            player.sendMessage("§cYou are already queued for " + gameQueue.getName());
+            return;
+        }
+
         Player existingPlayer = queues.get(kit);
+        // leave queue if already in it
         if (existingPlayer == player) {
             removePlayer(player, kit);
             player.sendMessage("§dLeft queue for §5" + kit.getDisplayName());
         }
+        // join queue
         else {
             if (existingPlayer == null) {
                 queues.replace(kit, player);
             } else {
                 removePlayer(existingPlayer);
                 removePlayer(player);
-                Duel newDuel = new Duel(existingPlayer, player);
+                Duel newDuel = new Duel(existingPlayer, player, kit);
                 ActiveGames.addGame(newDuel);
             }
             player.sendMessage("§aJoined queue for §2" + kit.getDisplayName());

@@ -27,6 +27,11 @@ public class BlockClickEvent implements Listener {
         if (kit == null) return;
 
         Player player = event.getPlayer();
-        DuelsQueues.addPlayer(player, kit);
+        if (text.contains("1v1")) {
+            Duels1v1Queues.addPlayer(player, kit);
+        }
+        else if (text.contains("FFA")) {
+            player.sendMessage("FFA duels not made yet");
+        }
     }
 }

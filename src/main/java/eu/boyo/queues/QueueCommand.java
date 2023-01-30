@@ -1,6 +1,6 @@
 package eu.boyo.queues;
 
-import eu.boyo.games.duels.Duels1v1Queues;
+import eu.boyo.games.duels.solo.SoloDuelsQueues;
 import eu.boyo.games.duels.DuelsKit;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
@@ -45,7 +45,7 @@ public class QueueCommand implements CommandExecutor {
             player.sendMessage("§cYou are already queued for §4" + currentQueue.getName());
             return true;
         }
-        HashSet<DuelsKit> duelsQueues = Duels1v1Queues.getPlayerQueues(player);
+        HashSet<DuelsKit> duelsQueues = SoloDuelsQueues.getPlayerQueues(player);
         if (!duelsQueues.isEmpty()) {
             player.sendMessage("§cYou are already queued for §4duels");
             return true;

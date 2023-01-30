@@ -287,22 +287,82 @@ public enum DuelsKit {
         return items;
     }},
 
+    CRYSTAL("Crystal", true) { public HashMap<Integer, ItemStack> getItems() {
+        HashMap<Integer, ItemStack> items = new HashMap<>();
+        // sword
+        ItemStack sword = new ItemStack(Material.NETHERITE_SWORD);
+        items.put(0, sword);
+        // respawn anchors
+        ItemStack anchors = new ItemStack(Material.RESPAWN_ANCHOR, 64);
+        items.put(1, anchors);
+        // glowstone
+        ItemStack glowstone = new ItemStack(Material.GLOWSTONE, 64);
+        items.put(2, glowstone);
+        // pearls
+        ItemStack pearls = new ItemStack(Material.ENDER_PEARL, 16);
+        int[] pearlSlots = {3, 9, 18, 19, 27, 28, 29, 30};
+        for (int slot : pearlSlots) items.put(slot, pearls);
+        // totems
+        ItemStack totem = new ItemStack(Material.TOTEM_OF_UNDYING);
+        int[] totemSlots = {4, 10, 11, 12, 13, 14, 15, 16, 20, 21, 22, 23, 31, 104};
+        for (int slot : totemSlots) items.put(slot, totem);
+        // obsidian
+        ItemStack obsidian = new ItemStack(Material.OBSIDIAN, 64);
+        items.put(5, obsidian);
+        items.put(24, obsidian);
+        items.put(32, obsidian);
+        // crystals
+        ItemStack crystals = new ItemStack(Material.END_CRYSTAL, 64);
+        items.put(6, crystals);
+        items.put(25, crystals);
+        items.put(33, crystals);
+        items.put(34, crystals);
+        // gapples
+        ItemStack gapples = new ItemStack(Material.GOLDEN_APPLE, 64);
+        items.put(7, gapples);
+        // pickaxe
+        ItemStack pickaxe = new ItemStack(Material.NETHERITE_PICKAXE);
+        items.put(8, pickaxe);
+        // xp bottles
+        ItemStack xp = new ItemStack(Material.EXPERIENCE_BOTTLE, 64);
+        items.put(17, xp);
+        items.put(26, xp);
+        items.put(35, xp);
+        // helmet
+        ItemStack helmet = new ItemStack(Material.NETHERITE_HELMET);
+        items.put(103, helmet);
+        // chestplate
+        ItemStack chestplate = new ItemStack(Material.NETHERITE_CHESTPLATE);
+        items.put(102, chestplate);
+        // leggings
+        ItemStack leggings = new ItemStack(Material.NETHERITE_LEGGINGS);
+        items.put(101, leggings);
+        // boots
+        ItemStack boots = new ItemStack(Material.NETHERITE_BOOTS);
+        items.put(100, boots);
+        return items;
+    }},
+
     RANDOM("Random", false) { public HashMap<Integer, ItemStack> getItems() {
         HashMap<Integer, ItemStack> items = new HashMap<>();
 
-        ArrayList<Material> materials = new ArrayList<>();
+        // get all materials that are items
+        ArrayList<Material> validMaterials = new ArrayList<>();
         for (Material material : Material.values()) {
-            if (material.isItem()) materials.add(material);
+            if (material.isItem()) validMaterials.add(material);
         }
 
+        // choose a random material for each slot
         for (int slot=0; slot<=35; slot++) {
             if (slot == 9) slot = 18;
 
-            int n = (int) (Math.random() * materials.size());
-            Material material = materials.get(n);
+            int n = (int) (Math.random() * validMaterials.size());
+            Material material = validMaterials.get(n);
             byte stack = (byte) (Math.random() * material.getMaxStackSize() + 1);
+
             ItemStack item = new ItemStack(material, stack);
             items.put(slot, item);
+            validMaterials.remove(material);
         }
         return items;
     }};

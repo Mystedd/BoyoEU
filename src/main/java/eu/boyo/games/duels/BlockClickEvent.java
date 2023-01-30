@@ -1,5 +1,6 @@
 package eu.boyo.games.duels;
 
+import eu.boyo.games.duels.solo.SoloDuelsQueues;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -28,7 +29,7 @@ public class BlockClickEvent implements Listener {
 
         Player player = event.getPlayer();
         if (text.contains("1v1")) {
-            Duels1v1Queues.addPlayer(player, kit);
+            SoloDuelsQueues.addPlayer(player, kit);
         }
         else if (text.contains("FFA")) {
             player.sendMessage("FFA duels not made yet");

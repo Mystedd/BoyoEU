@@ -1,6 +1,7 @@
-package eu.boyo.games.duels;
+package eu.boyo.games.duels.solo;
 
 import eu.boyo.games.ActiveGames;
+import eu.boyo.games.duels.DuelsKit;
 import eu.boyo.queues.Queue;
 import eu.boyo.queues.Queues;
 import org.bukkit.entity.Player;
@@ -8,7 +9,7 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class Duels1v1Queues {
+public class SoloDuelsQueues {
 
     static HashMap<DuelsKit, Player> queues = new HashMap<>();
 
@@ -39,7 +40,7 @@ public class Duels1v1Queues {
             } else {
                 removePlayer(existingPlayer);
                 removePlayer(player);
-                Duel newDuel = new Duel(existingPlayer, player, kit);
+                SoloDuel newDuel = new SoloDuel(existingPlayer, player, kit);
                 ActiveGames.addGame(newDuel);
             }
             player.sendMessage("§aJoined queue for §2" + kit.getDisplayName());

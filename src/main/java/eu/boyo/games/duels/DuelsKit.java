@@ -1,16 +1,20 @@
 package eu.boyo.games.duels;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 public enum DuelsKit {
 
@@ -291,6 +295,11 @@ public enum DuelsKit {
         HashMap<Integer, ItemStack> items = new HashMap<>();
         // sword
         ItemStack sword = new ItemStack(Material.NETHERITE_SWORD);
+        sword.addEnchantment(Enchantment.MENDING, 1);
+        sword.addEnchantment(Enchantment.DURABILITY, 3);
+        sword.addEnchantment(Enchantment.FIRE_ASPECT, 2);
+        sword.addEnchantment(Enchantment.SWEEPING_EDGE, 3);
+        sword.addEnchantment(Enchantment.DAMAGE_ALL, 5);
         items.put(0, sword);
         // respawn anchors
         ItemStack anchors = new ItemStack(Material.RESPAWN_ANCHOR, 64);
@@ -322,6 +331,9 @@ public enum DuelsKit {
         items.put(7, gapples);
         // pickaxe
         ItemStack pickaxe = new ItemStack(Material.NETHERITE_PICKAXE);
+        pickaxe.addEnchantment(Enchantment.DURABILITY, 3);
+        pickaxe.addEnchantment(Enchantment.MENDING, 1);
+        pickaxe.addEnchantment(Enchantment.DIG_SPEED, 5);
         items.put(8, pickaxe);
         // xp bottles
         ItemStack xp = new ItemStack(Material.EXPERIENCE_BOTTLE, 64);
@@ -330,20 +342,296 @@ public enum DuelsKit {
         items.put(35, xp);
         // helmet
         ItemStack helmet = new ItemStack(Material.NETHERITE_HELMET);
+        helmet.addEnchantment(Enchantment.MENDING, 1);
+        helmet.addEnchantment(Enchantment.DURABILITY, 3);
+        helmet.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
         items.put(103, helmet);
         // chestplate
         ItemStack chestplate = new ItemStack(Material.NETHERITE_CHESTPLATE);
+        chestplate.addEnchantment(Enchantment.MENDING, 1);
+        chestplate.addEnchantment(Enchantment.DURABILITY, 3);
+        chestplate.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
         items.put(102, chestplate);
         // leggings
         ItemStack leggings = new ItemStack(Material.NETHERITE_LEGGINGS);
+        leggings.addEnchantment(Enchantment.MENDING, 1);
+        leggings.addEnchantment(Enchantment.DURABILITY, 3);
+        leggings.addEnchantment(Enchantment.PROTECTION_EXPLOSIONS, 4);
         items.put(101, leggings);
         // boots
         ItemStack boots = new ItemStack(Material.NETHERITE_BOOTS);
+        boots.addEnchantment(Enchantment.MENDING, 1);
+        boots.addEnchantment(Enchantment.DURABILITY, 3);
+        boots.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+        boots.addEnchantment(Enchantment.PROTECTION_FALL, 4);
         items.put(100, boots);
         return items;
     }},
 
-    RANDOM("Random", false) { public HashMap<Integer, ItemStack> getItems() {
+    BOW("Bow", false) { public HashMap<Integer, ItemStack> getItems() {
+        HashMap<Integer, ItemStack> items = new HashMap<>();
+        // bow
+        ItemStack bow = new ItemStack(Material.BOW);
+        items.put(0, bow);
+        // arrows
+        ItemStack arrows = new ItemStack(Material.ARROW, 64);
+        items.put(1, arrows);
+        // helmet
+        ItemStack helmet = new ItemStack(Material.IRON_HELMET);
+        items.put(103, helmet);
+        // chestplate
+        ItemStack chestplate = new ItemStack(Material.IRON_CHESTPLATE);
+        items.put(102, chestplate);
+        // leggings
+        ItemStack leggings = new ItemStack(Material.IRON_LEGGINGS);
+        items.put(101, leggings);
+        // boots
+        ItemStack boots = new ItemStack(Material.IRON_BOOTS);
+        items.put(100, boots);
+        return items;
+    }},
+
+    CLASSIC_CPVP("Classic CPvP", true) { public HashMap<Integer, ItemStack> getItems() {
+        HashMap<Integer, ItemStack> items = new HashMap<>();
+        // potions
+        PotionMeta data;
+        // sword
+        ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
+        sword.addEnchantment(Enchantment.KNOCKBACK, 2);
+        sword.addEnchantment(Enchantment.MENDING, 1);
+        sword.addEnchantment(Enchantment.DURABILITY, 3);
+        sword.addEnchantment(Enchantment.FIRE_ASPECT, 2);
+        sword.addEnchantment(Enchantment.SWEEPING_EDGE, 3);
+        sword.addEnchantment(Enchantment.DAMAGE_ALL, 5);
+        items.put(0, sword);
+        // pearls
+        ItemStack pearls = new ItemStack(Material.ENDER_PEARL, 16);
+        int[] pearlSlots = {1, 9, 10, 18, 19, 27, 28};
+        for (int slot : pearlSlots) items.put(slot, pearls);
+        // obsidian
+        ItemStack obsidian = new ItemStack(Material.OBSIDIAN, 64);
+        items.put(2, obsidian);
+        items.put(29, obsidian);
+        // crystals
+        ItemStack crystals = new ItemStack(Material.END_CRYSTAL, 64);
+        items.put(3, crystals);
+        items.put(30, crystals);
+        // gapples
+        ItemStack gapples = new ItemStack(Material.GOLDEN_APPLE, 64);
+        items.put(4, gapples);
+        // strength
+        ItemStack strength = new ItemStack(Material.SPLASH_POTION);
+        data = (PotionMeta) strength.getItemMeta();
+        data.setBasePotionData(new PotionData(PotionType.STRENGTH, false, true));
+        strength.setItemMeta(data);
+        int[] strengthSlots = {5, 12, 13, 14, 15, 16, 17};
+        for (int slot : strengthSlots) items.put(slot, strength);
+        // speed
+        ItemStack speed = new ItemStack(Material.SPLASH_POTION);
+        data = (PotionMeta) speed.getItemMeta();
+        data.setBasePotionData(new PotionData(PotionType.SPEED, false, true));
+        speed.setItemMeta(data);
+        int[] speedSlots = {6, 21, 22, 23, 24, 25, 26};
+        for (int slot : speedSlots) items.put(slot, speed);
+        // pickaxe
+        ItemStack pickaxe = new ItemStack(Material.DIAMOND_PICKAXE);
+        pickaxe.addEnchantment(Enchantment.DURABILITY, 3);
+        pickaxe.addEnchantment(Enchantment.MENDING, 1);
+        pickaxe.addEnchantment(Enchantment.DIG_SPEED, 5);
+        items.put(7, pickaxe);
+        // totems
+        ItemStack totem = new ItemStack(Material.TOTEM_OF_UNDYING);
+        int[] totemSlots = {8, 31, 32, 33, 34, 35, 104};
+        for (int slot : totemSlots) items.put(slot, totem);
+        // xp bottles
+        ItemStack xp = new ItemStack(Material.EXPERIENCE_BOTTLE);
+        items.put(11, xp);
+        items.put(20, xp);
+        // helmet
+        ItemStack helmet = new ItemStack(Material.NETHERITE_HELMET);
+        helmet.addEnchantment(Enchantment.MENDING, 1);
+        helmet.addEnchantment(Enchantment.DURABILITY, 3);
+        helmet.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+        items.put(103, helmet);
+        // chestplate
+        ItemStack chestplate = new ItemStack(Material.NETHERITE_CHESTPLATE);
+        chestplate.addEnchantment(Enchantment.MENDING, 1);
+        chestplate.addEnchantment(Enchantment.DURABILITY, 3);
+        chestplate.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+        items.put(102, chestplate);
+        // leggings
+        ItemStack leggings = new ItemStack(Material.NETHERITE_LEGGINGS);
+        leggings.addEnchantment(Enchantment.MENDING, 1);
+        leggings.addEnchantment(Enchantment.DURABILITY, 3);
+        leggings.addEnchantment(Enchantment.PROTECTION_EXPLOSIONS, 4);
+        items.put(101, leggings);
+        // boots
+        ItemStack boots = new ItemStack(Material.NETHERITE_BOOTS);
+        boots.addEnchantment(Enchantment.MENDING, 1);
+        boots.addEnchantment(Enchantment.DURABILITY, 3);
+        boots.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+        boots.addEnchantment(Enchantment.PROTECTION_FALL, 4);
+        items.put(100, boots);
+        return items;
+    }},
+
+    HSG("HSG", false) { public HashMap<Integer, ItemStack> getItems() {
+        HashMap<Integer, ItemStack> items = new HashMap<>();
+        // sword
+        ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
+        sword.addEnchantment(Enchantment.DAMAGE_ALL, 4);
+        items.put(0, sword);
+        // gappples
+        ItemStack gapples = new ItemStack(Material.GOLDEN_APPLE, 6);
+        items.put(1, gapples);
+        // bow
+        ItemStack bow = new ItemStack(Material.BOW);
+        items.put(2, bow);
+        // pufferfish
+        ItemStack pufferfish = new ItemStack(Material.PUFFERFISH_BUCKET);
+        items.put(3, pufferfish);
+        items.put(30, pufferfish);
+        // pearls
+        ItemStack pearls = new ItemStack(Material.ENDER_PEARL, 2);
+        items.put(4, pearls);
+        // cobwebs
+        ItemStack cobwebs = new ItemStack(Material.COBWEB, 6);
+        items.put(5, cobwebs);
+        // water
+        ItemStack water = new ItemStack(Material.WATER_BUCKET);
+        items.put(6, water);
+        items.put(33, water);
+        // lava
+        ItemStack lava = new ItemStack(Material.LAVA_BUCKET);
+        items.put(7, lava);
+        items.put(34, lava);
+        // cobblestone
+        ItemStack cobblestone = new ItemStack(Material.COBBLESTONE, 64);
+        items.put(8, cobblestone);
+        items.put(35, cobblestone);
+        // pickaxe
+        ItemStack pickaxe = new ItemStack(Material.DIAMOND_PICKAXE);
+        items.put(20, pickaxe);
+        // arrows
+        ItemStack arrows = new ItemStack(Material.ARROW, 16);
+        items.put(27, arrows);
+        // axe
+        ItemStack axe = new ItemStack(Material.DIAMOND_AXE);
+        axe.addEnchantment(Enchantment.DIG_SPEED, 3);
+        items.put(28, axe);
+        // golden heads
+        ItemStack heads = new ItemStack(Material.PLAYER_HEAD, 3);
+        SkullMeta data = (SkullMeta) heads.getItemMeta();
+        OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString("57a8704d-b3f4-4c8f-bea0-64675011fe7b"));
+        data.setOwningPlayer(player);
+        heads.setItemMeta(data);
+        items.put(29, heads);
+        // crossbow
+        ItemStack crossbow = new ItemStack(Material.CROSSBOW);
+        crossbow.addEnchantment(Enchantment.PIERCING, 1);
+        items.put(32, crossbow);
+        // helmet
+        ItemStack helmet = new ItemStack(Material.TURTLE_HELMET);
+        helmet.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+        items.put(103, helmet);
+        // chestplate
+        ItemStack chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
+        chestplate.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+        items.put(102, chestplate);
+        // leggings
+        ItemStack leggings = new ItemStack(Material.IRON_LEGGINGS);
+        leggings.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+        items.put(101, leggings);
+        // boots
+        ItemStack boots = new ItemStack(Material.DIAMOND_BOOTS);
+        boots.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+        items.put(100, boots);
+        return items;
+    }},
+
+    NETHPOT("Nethpot", true) { public HashMap<Integer, ItemStack> getItems() {
+        HashMap<Integer, ItemStack> items = new HashMap<>();
+        // potions
+        PotionMeta data;
+        int[] slots;
+        // sword
+        ItemStack sword = new ItemStack(Material.NETHERITE_SWORD);
+        sword.addEnchantment(Enchantment.MENDING, 1);
+        sword.addEnchantment(Enchantment.DURABILITY, 3);
+        sword.addEnchantment(Enchantment.FIRE_ASPECT, 2);
+        sword.addEnchantment(Enchantment.SWEEPING_EDGE, 3);
+        sword.addEnchantment(Enchantment.DAMAGE_ALL, 5);
+        items.put(0, sword);
+        // healing
+        ItemStack healing = new ItemStack(Material.SPLASH_POTION);
+        data = (PotionMeta) healing.getItemMeta();
+        data.setBasePotionData(new PotionData(PotionType.INSTANT_HEAL, false, true));
+        healing.setItemMeta(data);
+        int[] healingSlots = {1, 2, 3, 4, 8, 10, 11, 12, 13, 19, 20, 21, 22, 28, 29, 30, 31, 32};
+        for (int slot : healingSlots) items.put(slot, healing);
+        // speed
+        ItemStack speed = new ItemStack(Material.SPLASH_POTION);
+        data = (PotionMeta) speed.getItemMeta();
+        data.setBasePotionData(new PotionData(PotionType.SPEED, false, true));
+        speed.setItemMeta(data);
+        int[] speedSlots = {6, 14, 15, 23, 24, 33};
+        for (int slot : speedSlots) items.put(slot, speed);
+        // strength
+        ItemStack strength = new ItemStack(Material.SPLASH_POTION);
+        data = (PotionMeta) strength.getItemMeta();
+        data.setBasePotionData(new PotionData(PotionType.STRENGTH, false, true));
+        strength.setItemMeta(data);
+        int[] strengthSlots = {7, 16, 17, 25, 26, 34};
+        for (int slot : strengthSlots) items.put(slot, strength);
+        // totems
+        ItemStack totem = new ItemStack(Material.TOTEM_OF_UNDYING);
+        items.put(5, totem);
+        items.put(27, totem);
+        items.put(35, totem);
+        // xp bottles
+        ItemStack xp = new ItemStack(Material.EXPERIENCE_BOTTLE, 64);
+        items.put(9, xp);
+        items.put(18, xp);
+        // helmet
+        ItemStack helmet = new ItemStack(Material.NETHERITE_HELMET);
+        helmet.addEnchantment(Enchantment.MENDING, 1);
+        helmet.addEnchantment(Enchantment.DURABILITY, 3);
+        helmet.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+        items.put(103, helmet);
+        // chestplate
+        ItemStack chestplate = new ItemStack(Material.NETHERITE_CHESTPLATE);
+        chestplate.addEnchantment(Enchantment.MENDING, 1);
+        chestplate.addEnchantment(Enchantment.DURABILITY, 3);
+        chestplate.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+        items.put(102, chestplate);
+        // leggings
+        ItemStack leggings = new ItemStack(Material.NETHERITE_LEGGINGS);
+        leggings.addEnchantment(Enchantment.MENDING, 1);
+        leggings.addEnchantment(Enchantment.DURABILITY, 3);
+        leggings.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+        items.put(101, leggings);
+        // boots
+        ItemStack boots = new ItemStack(Material.NETHERITE_BOOTS);
+        boots.addEnchantment(Enchantment.MENDING, 1);
+        boots.addEnchantment(Enchantment.DURABILITY, 3);
+        boots.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+        boots.addEnchantment(Enchantment.PROTECTION_FALL, 4);
+        items.put(100, boots);
+        // gapples
+        ItemStack gapples = new ItemStack(Material.GOLDEN_APPLE, 64);
+        items.put(104, gapples);
+        return items;
+    }},
+
+    SUMO("Sumo", false) { public HashMap<Integer, ItemStack> getItems() {
+        HashMap<Integer, ItemStack> items = new HashMap<>();
+        // fish
+        ItemStack fish = new ItemStack(Material.COD);
+        items.put(0, fish);
+        return items;
+    }},
+
+    RANDOM("Random", true) { public HashMap<Integer, ItemStack> getItems() {
         HashMap<Integer, ItemStack> items = new HashMap<>();
 
         // get all materials that are items
@@ -367,15 +655,15 @@ public enum DuelsKit {
         return items;
     }};
 
-    final boolean hasSaturation;
+    final boolean hasHunger;
     final String name;
 
     public HashMap<Integer, ItemStack> getItems() {
         return new HashMap<>();
     }
 
-    public boolean getSaturation() {
-        return hasSaturation;
+    public boolean getHunger() {
+        return hasHunger;
     }
 
     public String getName() {
@@ -405,8 +693,8 @@ public enum DuelsKit {
         giveItems(player2);
     }
 
-    DuelsKit(String newName, boolean saturation) {
+    DuelsKit(String newName, boolean hunger) {
         name = newName;
-        hasSaturation = saturation;
+        hasHunger = hunger;
     }
 }

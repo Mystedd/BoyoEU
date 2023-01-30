@@ -35,15 +35,18 @@ public class SoloDuelsQueues {
         }
         // join queue
         else {
-            if (existingPlayer == null) {
-                queues.replace(kit, player);
-            } else {
-                removePlayer(existingPlayer);
-                removePlayer(player);
-                SoloDuel newDuel = new SoloDuel(existingPlayer, player, kit);
-                ActiveGames.addGame(newDuel);
-            }
-            player.sendMessage("§aJoined queue for §2" + kit.getDisplayName());
+            SoloDuel newDuel = new SoloDuel(player, player, kit);
+            ActiveGames.addGame(newDuel);
+            return;
+            // TESTING if (existingPlayer == null) {
+                // TESTING queues.replace(kit, player);
+            // TESTNG } else {
+                // removePlayer(existingPlayer);
+                // removePlayer(player);
+                // SoloDuel newDuel = new SoloDuel(existingPlayer, player, kit);
+                // ActiveGames.addGame(newDuel);
+            //}
+            // player.sendMessage("§aJoined queue for §2" + kit.getDisplayName());
         }
 
         HashSet<DuelsKit> otherQueues = getPlayerQueues(player);

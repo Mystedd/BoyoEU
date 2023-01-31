@@ -22,15 +22,16 @@ public class TagGame extends Game {
 
     Timer timer = new Timer();
 
+    static TagSettings settings;
     static Player tagger;
 
     public TagGame(ArrayList<Player> players) {
-        TagSettings settings = new TagSettings(TagWeapon.DEFAULT, TagMode.DEFAULT, TagMap.DESERT, (byte) 15, (short) 300, true, true);
+        settings = new TagSettings(TagWeapon.DEFAULT, TagMode.DEFAULT, TagMap.DESERT, (byte) 15, (short) 300, true, true);
         // Create Game ID
-        startGame(settings, players);
+        startGame(players);
     }
 
-    private void startGame(TagSettings settings, ArrayList<Player> players) {
+    private void startGame(ArrayList<Player> players) {
 
         for (Player player : players) {
             player.sendMessage("Game is starting!");
@@ -89,6 +90,13 @@ public class TagGame extends Game {
                 taggedTime.replace(tagger, taggedTime.get(tagger) + (float) 0.001);
             }
         }, 1, 1);
+
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                stopGame(players, taggedTime);
+            }
+        }, settings.gameLength * 1000);
 
     }
 

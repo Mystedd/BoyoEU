@@ -2,6 +2,7 @@ package eu.boyo.games.duels.solo;
 
 import eu.boyo.games.Game;
 import eu.boyo.games.duels.DuelsKit;
+import eu.boyo.games.duels.StandardDuelsKit;
 import org.bukkit.entity.Player;
 
 public class SoloDuel extends Game {

@@ -1,6 +1,5 @@
-package eu.boyo.games.duels;
+package eu.boyo.games.duels.solo.random;
 
-import eu.boyo.games.duels.solo.SoloDuelsQueues;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -21,7 +20,8 @@ public class EntityClickEvent implements Listener {
         Player player = event.getPlayer();
         String name = entity.getName();
         if (name.contains("Random Duels")) {
-            SoloDuelsQueues.addPlayer(player, DuelsKit.RANDOM);
+            ModeGUI gui = new ModeGUI();
+            player.openInventory(gui.getInventory());
         }
     }
 }

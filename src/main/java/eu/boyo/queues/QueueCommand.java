@@ -1,7 +1,7 @@
 package eu.boyo.queues;
 
-import eu.boyo.games.duels.solo.SoloDuelsQueues;
 import eu.boyo.games.duels.DuelsKit;
+import eu.boyo.games.duels.solo.SoloDuelsQueues;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 

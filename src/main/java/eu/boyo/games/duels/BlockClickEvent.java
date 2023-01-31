@@ -19,8 +19,8 @@ public class BlockClickEvent implements Listener {
         if (!block.getWorld().getName().equals("Lobby")) return;
 
         String text = ((Sign)block.getState()).getLine(1);
-        DuelsKit kit = null;
-        for (DuelsKit testKit : DuelsKit.values()) {
+        StandardDuelsKit kit = null;
+        for (StandardDuelsKit testKit : StandardDuelsKit.values()) {
             if (text.contains(testKit.getName())) {
                 kit = testKit;
             }

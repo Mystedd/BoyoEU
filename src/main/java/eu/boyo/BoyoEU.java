@@ -1,6 +1,5 @@
 package eu.boyo;
 
-import eu.boyo.games.tag.TagGame;
 import eu.boyo.lobby.LobbyCommand;
 import eu.boyo.queues.ForceStartCommand;
 import eu.boyo.queues.QueueCommand;
@@ -24,7 +23,8 @@ public final class BoyoEU extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new eu.boyo.queues.EntityClickEvent(), this);
         getServer().getPluginManager().registerEvents(new eu.boyo.lobby.LobbyMain.PlayerJoinEvent(), this);
         getServer().getPluginManager().registerEvents(new eu.boyo.games.duels.BlockClickEvent(), this);
-        getServer().getPluginManager().registerEvents(new TagGame.TagPvP(), this);
+        getServer().getPluginManager().registerEvents(new eu.boyo.games.duels.solo.random.EntityClickEvent(), this);
+        getServer().getPluginManager().registerEvents(new eu.boyo.games.duels.solo.random.ModeGUI.ClickEvent(), this);
 
         Bukkit.getLogger().info("BoyoEU plugin loaded");
     }

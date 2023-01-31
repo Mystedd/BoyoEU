@@ -1,8 +1,12 @@
 package eu.boyo.games.tag;
 
+import eu.boyo.BoyoEU;
 import eu.boyo.games.BuildTools;
 import eu.boyo.games.Game;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
+import net.kyori.adventure.title.TitlePart;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Biome;
@@ -13,9 +17,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.lang.reflect.Array;
 import java.util.*;
+
+import static org.bukkit.Bukkit.getServer;
 
 
 public class TagGame extends Game {
@@ -25,13 +34,30 @@ public class TagGame extends Game {
     static TagSettings settings;
     static Player tagger;
 
+    public static class TagPvP implements Listener {
+        @EventHandler
+        public void playerTagged(EntityDamageByEntityEvent event) {
+            if (tagger == event.getDamager()) {
+                Entity entityHit = event.getEntity();
+                if (entityHit.getType() == EntityType.PLAYER) {
+                    tagger = (Player) entityHit;
+                    tagger.sendMessage("You tagged " + entityHit.getName());
+                    entityHit.sendMessage(tagger.name() + " tagged you.");
+                }
+            }
+        }
+    }
+
     public TagGame(ArrayList<Player> players) {
+        getServer().getPluginManager().registerEvents(new TagGame.TagPvP(), BoyoEU.plugin);
         settings = new TagSettings(TagWeapon.DEFAULT, TagMode.DEFAULT, TagMap.DESERT, (byte) 15, (short) 300, true, true);
         // Create Game ID
         startGame(players);
     }
 
     private void startGame(ArrayList<Player> players) {
+
+        Bukkit.getLogger().info("Tag Game Started");
 
         for (Player player : players) {
             player.sendMessage("Game is starting!");
@@ -73,6 +99,8 @@ public class TagGame extends Game {
 
     private void endGrace(ArrayList<Player> players) {
 
+        Bukkit.getLogger().info("Tag Grace Period Ended");
+
         tagger = players.get(new Random().nextInt(players.size()));
 
         HashMap<Player, Float> taggedTime = new HashMap();
@@ -102,52 +130,22 @@ public class TagGame extends Game {
 
     private void stopGame(ArrayList<Player> players, HashMap<Player, Float> taggedTime) {
 
+        Bukkit.getLogger().info("Tag Game Ended");
+
         timer.cancel();
 
-        Float winTime = Collections.min(taggedTime.values());
-        Float loseTime = Collections.max(taggedTime.values());
-
-        ArrayList<Player> winners = new ArrayList<Player>();
-        ArrayList<Player> losers = new ArrayList<Player>();
-
-        for (Map.Entry<Player, Float> entry : taggedTime.entrySet()) {
-            if (entry.getValue() == winTime) {
-                winners.add(entry.getKey());
-            } else if (entry.getValue() == loseTime) {
-                losers.add(entry.getKey());
-            }
-        }
-
-        // Construct End Msg
-        String endMessage = "Winners: ";
-        for (Player winner : winners) {
-            endMessage = endMessage + winner.getName() + ", ";
-        }
-        endMessage = endMessage + "\nLosers: ";
-        for (Player loser : losers) {
-            endMessage = endMessage + loser.getName() + ", ";
-        }
-
         for (Player player : players) {
-            player.sendMessage(endMessage);
-        }
+            player.sendTitle("Tag Game Ended!","",10,30,10);
+            for (Map.Entry entry : taggedTime.entrySet()) {
+                Player entryPlayer = (Player) entry.getKey();
+                Float entryTime = (Float) entry.getValue();
 
-    }
-
-    public static class TagPvP extends JavaPlugin implements Listener {
-
-        @EventHandler
-        public void playerTagged(EntityDamageByEntityEvent event) {
-            if (tagger == event.getDamager()) {
-                Entity entityHit = event.getEntity();
-                if (entityHit.getType() == EntityType.PLAYER) {
-                    tagger = (Player) entityHit;
-                    tagger.sendMessage("You tagged " + entityHit.getName());
-                    entityHit.sendMessage(tagger.name() + " tagged you.");
-                }
+                player.sendMessage(entryPlayer.getName() + ": " + entryTime + " Seconds.");
             }
         }
 
     }
+
+
 
 }

@@ -3,6 +3,7 @@ package eu.boyo.games.duels.solo;
 import eu.boyo.games.ActiveGames;
 import eu.boyo.games.duels.DuelsKit;
 import eu.boyo.games.duels.StandardDuelsKit;
+import eu.boyo.games.duels.solo.random.RandomDuelsKit;
 import eu.boyo.queues.Queue;
 import eu.boyo.queues.Queues;
 import org.bukkit.entity.Player;
@@ -16,6 +17,9 @@ public class SoloDuelsQueues {
 
     static {
         for (StandardDuelsKit kit : StandardDuelsKit.values()) {
+            queues.put(kit, null);
+        }
+        for (RandomDuelsKit kit : RandomDuelsKit.values()) {
             queues.put(kit, null);
         }
     }
@@ -36,15 +40,18 @@ public class SoloDuelsQueues {
         }
         // join queue
         else {
+            player.sendMessage("§aJoined queue for §2" + kit.getDisplayName());
+            SoloDuel newDuel = new SoloDuel(player, player, kit);
+            ActiveGames.addGame(newDuel);
+            if (true) return;
             if (existingPlayer == null) {
                 queues.replace(kit, player);
             } else {
                 removePlayer(existingPlayer);
                 removePlayer(player);
-                SoloDuel newDuel = new SoloDuel(existingPlayer, player, kit);
+                // SoloDuel newDuel = new SoloDuel(existingPlayer, player, kit);
                 ActiveGames.addGame(newDuel);
             }
-            player.sendMessage("§aJoined queue for §2" + kit.getDisplayName());
         }
 
         HashSet<DuelsKit> otherQueues = getPlayerQueues(player);

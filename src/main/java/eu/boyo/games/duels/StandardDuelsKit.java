@@ -629,36 +629,6 @@ public enum StandardDuelsKit implements DuelsKit {
         ItemStack fish = new ItemStack(Material.COD);
         items.put(0, fish);
         return items;
-    }},
-
-    RANDOM_ITEM("Random Item", true) {
-
-        public void giveItems(Player player1, Player player2) {
-            super.giveItems(player1, player2);
-        }
-
-        public HashMap<Integer, ItemStack> getItems() {
-        HashMap<Integer, ItemStack> items = new HashMap<>();
-
-        // get all materials that are items
-        ArrayList<Material> validMaterials = new ArrayList<>();
-        for (Material material : Material.values()) {
-            if (material.isItem()) validMaterials.add(material);
-        }
-
-        // choose a random material for each slot
-        for (int slot=0; slot<=35; slot++) {
-            if (slot == 9) slot = 18;
-
-            int n = (int) (Math.random() * validMaterials.size());
-            Material material = validMaterials.get(n);
-            byte stack = (byte) (Math.random() * material.getMaxStackSize() + 1);
-
-            ItemStack item = new ItemStack(material, stack);
-            items.put(slot, item);
-            validMaterials.remove(material);
-        }
-        return items;
     }};
 
     final boolean hasHunger;

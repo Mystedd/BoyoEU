@@ -42,7 +42,7 @@ public class ModeGUI implements InventoryHolder {
             else if (event.getSlot() == itemButtonSlot) {
                 player.sendMessage("Random item");
                 player.closeInventory();
-                SoloDuelsQueues.addPlayer(player, StandardDuelsKit.RANDOM_ITEM);
+                SoloDuelsQueues.addPlayer(player, RandomDuelsKit.RANDOM_ITEM);
             }
         }
     }

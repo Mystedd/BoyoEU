@@ -1,9 +1,16 @@
 package eu.boyo.games;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockState;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
 
 
 public class BuildTools {
@@ -28,6 +35,34 @@ public class BuildTools {
                 }
             }
         }
+    }
+
+    public static ItemStack createItem(Material mat, String name, String lore, boolean glint) {
+        ItemStack item = new ItemStack(mat);
+        ItemMeta data = item.getItemMeta();
+        data.setDisplayName(name);
+        ArrayList<String> loreList = new ArrayList<String>();
+        loreList.add(lore);
+        data.setLore(loreList);
+        data.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        if (glint) {
+            data.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+            data.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
+        item.setItemMeta(data);
+        return item;
+    }
+
+    public static ItemStack createItem(Material mat, String name, String lore) {
+        return createItem(mat, name, lore, false);
+    }
+
+    public static ItemStack createItem(Material mat, String name) {
+        ItemStack item = new ItemStack(mat);
+        ItemMeta data = item.getItemMeta();
+        data.setDisplayName(name);
+        item.setItemMeta(data);
+        return item;
     }
 
 }

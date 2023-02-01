@@ -1,6 +1,7 @@
 package eu.boyo.games.duels.solo.random;
 
 import eu.boyo.BoyoEU;
+import eu.boyo.games.BuildTools;
 import eu.boyo.games.duels.StandardDuelsKit;
 import eu.boyo.games.duels.solo.SoloDuelsQueues;
 import org.bukkit.Bukkit;
@@ -23,7 +24,7 @@ import static org.bukkit.Bukkit.getServer;
 
 public class ModeGUI implements InventoryHolder {
 
-    public static class ClickEvent implements Listener {
+    public static class ModeGUIListener implements Listener {
         @EventHandler
         public void onClick(InventoryClickEvent event) {
             if (event.getClickedInventory() == null) return;
@@ -52,42 +53,22 @@ public class ModeGUI implements InventoryHolder {
     private static final byte itemButtonSlot = 15;
     private final Inventory inventory;
 
+    static {
+        getServer().getPluginManager().registerEvents(new ModeGUIListener(), BoyoEU.plugin);
+    }
+
     public ModeGUI() {
         inventory = Bukkit.createInventory(this, 27, "§5§lRandom Duels");
-        ItemStack pane = createItem(Material.MAGENTA_STAINED_GLASS_PANE, " ");
-        ItemStack effect = createItem(Material.POTION, "§3§rRandom Effect Duels", "§b1v1 duel with random status effects and a basic kit", true);
-        ItemStack ultimate = createItem(Material.SUSPICIOUS_STEW, "§6§rUltimate Random Duels", "§e1v1 duel with random items and effects", true);
-        ItemStack item = createItem(Material.LARGE_AMETHYST_BUD, "§2§rRandom Item Duels", "§a1v1 duel with a selection of randomised items", true);
+        ItemStack pane = BuildTools.createItem(Material.MAGENTA_STAINED_GLASS_PANE, " ");
+        ItemStack effect = BuildTools.createItem(Material.POTION, "§3§rRandom Effect Duels", "§b1v1 duel with random status effects and a basic kit", true);
+        ItemStack ultimate = BuildTools.createItem(Material.SUSPICIOUS_STEW, "§6§rUltimate Random Duels", "§e1v1 duel with random items and effects", true);
+        ItemStack item = BuildTools.createItem(Material.LARGE_AMETHYST_BUD, "§2§rRandom Item Duels", "§a1v1 duel with a selection of randomised items", true);
         for (byte slot=0; slot<27; slot++) {
             inventory.setItem(slot, pane);
         }
         inventory.setItem(effectButtonSlot, effect);
         inventory.setItem(ultimateButtonSlot, ultimate);
         inventory.setItem(itemButtonSlot, item);
-    }
-
-    private ItemStack createItem(Material mat, String name, String lore, boolean glint) {
-        ItemStack item = new ItemStack(mat);
-        ItemMeta data = item.getItemMeta();
-        data.setDisplayName(name);
-        ArrayList<String> loreList = new ArrayList<String>();
-        loreList.add(lore);
-        data.setLore(loreList);
-        data.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-        if (glint) {
-            data.addEnchant(Enchantment.BINDING_CURSE, 1, true);
-            data.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        }
-        item.setItemMeta(data);
-        return item;
-    }
-
-    private ItemStack createItem(Material mat, String name) {
-        ItemStack item = new ItemStack(mat);
-        ItemMeta data = item.getItemMeta();
-        data.setDisplayName(name);
-        item.setItemMeta(data);
-        return item;
     }
 
     @Override

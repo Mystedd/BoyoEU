@@ -32,9 +32,7 @@ public final class BoyoEU extends JavaPlugin {
         // Events
         getServer().getPluginManager().registerEvents(new eu.boyo.queues.EntityClickEvent(), this);
         getServer().getPluginManager().registerEvents(new eu.boyo.lobby.LobbyMain.PlayerJoinEvent(), this);
-        getServer().getPluginManager().registerEvents(new eu.boyo.games.duels.BlockClickEvent(), this);
-        getServer().getPluginManager().registerEvents(new eu.boyo.games.duels.solo.random.EntityClickEvent(), this);
-        getServer().getPluginManager().registerEvents(new eu.boyo.games.duels.solo.random.ModeGUI.ClickEvent(), this);
+        getServer().getPluginManager().registerEvents(new eu.boyo.games.duels.QueueClickEvent(), this);
 
         Bukkit.getLogger().info("BoyoEU plugin loaded");
     }

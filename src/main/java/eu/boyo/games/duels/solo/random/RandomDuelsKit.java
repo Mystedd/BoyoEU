@@ -1,20 +1,15 @@
 package eu.boyo.games.duels.solo.random;
 
-import com.google.gson.JsonParseException;
+import eu.boyo.BoyoEU;
 import eu.boyo.games.duels.DuelsKit;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 public enum RandomDuelsKit implements DuelsKit {
@@ -22,9 +17,9 @@ public enum RandomDuelsKit implements DuelsKit {
     RANDOM_ITEM("Random Item", true) {
 
         public void giveItems(Player player1, Player player2) {
-            final int minPower = 1000;
-            final int maxPower = 2000;
-            final int tolerance = 100;
+            final int minPower = 2000;
+            final int maxPower = 3000;
+            final int tolerance = 20;
             int targetPower = (int) (Math.random() * (maxPower-minPower) + minPower);
             player1.getInventory().clear();
             giveItems(player1, targetPower, tolerance);
@@ -151,6 +146,16 @@ public enum RandomDuelsKit implements DuelsKit {
         // generate valid materials
         for (Material material : Material.values()) {
             if (material.isItem()) validMaterials.add(material);
+        }
+        // read power values
+        FileConfiguration config = BoyoEU.plugin.getDuelsItemPowersConfig();
+        for (Material material : validMaterials) {
+            String namespace = material.name();
+            namespace = namespace.replaceAll("^minecraft:", "");
+            namespace = namespace.toLowerCase();
+            int power = config.getInt(namespace);
+            if (power == 0) power = 1;
+            powerValues.put(material, power);
         }
     }
 

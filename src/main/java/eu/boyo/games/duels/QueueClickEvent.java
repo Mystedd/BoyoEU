@@ -1,7 +1,8 @@
 package eu.boyo.games.duels;
 
-import eu.boyo.games.duels.preferences.PreferencesGUI;
+import eu.boyo.games.duels.settings.PreferencesGUI;
 import eu.boyo.games.duels.solo.SoloDuelsQueues;
+import eu.boyo.games.duels.solo.custom.CustomDuelsGUI;
 import eu.boyo.games.duels.solo.random.ModeGUI;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -60,6 +61,10 @@ public class QueueClickEvent implements Listener {
         String name = entity.getName();
         if (name.contains("Random Duels")) {
             ModeGUI gui = new ModeGUI();
+            player.openInventory(gui.getInventory());
+        }
+        else if (name.contains("Custom Duels")) {
+            CustomDuelsGUI gui = new CustomDuelsGUI(player);
             player.openInventory(gui.getInventory());
         }
     }

@@ -664,6 +664,15 @@ public enum StandardDuelsKit implements DuelsKit {
         }
     }
 
+    public void giveInventoryItems(Player player) {
+        PlayerInventory inventory = player.getInventory();
+        HashMap<Integer, ItemStack> items = getItems();
+        for (int slot : items.keySet()) {
+            ItemStack item = items.get(slot);
+            if (0 <= slot && slot <= 35) inventory.setItem(slot, item);
+        }
+    }
+
     public void giveItems(Player player1, Player player2) {
         giveItems(player1);
         giveItems(player2);

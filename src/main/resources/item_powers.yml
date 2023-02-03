@@ -1,2 +1,41 @@
-diamond_sword: 1000
-netherite_sword: 2000
+# WEAPONS
+wooden_sword: 400
+golden_sword: 300
+stone_sword: 500
+iron_sword: 600
+diamond_sword: 700
+netherite_sword: 800
+
+# ARMOR
+turtle_helmet: 200
+
+leather_helmet: 100
+leather_chestplate: 300
+leather_leggings: 200
+leather_boots: 100
+
+golden_helmet: 200
+golden_chestplate: 500
+golden_leggings: 300
+golden_boots: 100
+
+chainmail_helmet: 200
+chainmail_chestplate: 500
+chainmail_leggings: 400
+chainmail_boots: 100
+
+iron_helmet: 200
+iron_chestplate: 600
+iron_leggings: 500
+iron_boots: 200
+
+diamond_helmet: 350
+diamond_chestplate: 850
+diamond_leggings: 650
+diamond_boots: 350
+
+netherite_helmet: 400
+netherite_chestplate: 900
+netherite_leggings: 700
+netherite_boots: 400
+

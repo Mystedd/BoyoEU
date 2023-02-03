@@ -1,5 +1,6 @@
-package eu.boyo.games.duels.preferences;
+package eu.boyo.games.duels.settings;
 
+import eu.boyo.games.duels.DuelsKit;
 import eu.boyo.games.duels.StandardDuelsKit;
 
 import java.util.HashMap;
@@ -16,7 +17,9 @@ public class PlayerPreferences {
         preferredKits.remove(kit);
     }
 
-    public PreferredDuelsKit getPreferredKit(StandardDuelsKit kit) {
+    public DuelsKit getPreferredKit(StandardDuelsKit kit) {
+        PreferredDuelsKit preferredKit = preferredKits.get(kit);
+        if (preferredKit == null) return kit;
         return preferredKits.get(kit);
     }
 }

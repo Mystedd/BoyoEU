@@ -142,6 +142,10 @@ public enum RandomDuelsKit implements DuelsKit {
 
     }
 
+    public void giveInventoryItems(Player player) {
+
+    }
+
     static {
         // generate valid materials
         for (Material material : Material.values()) {

@@ -1,8 +1,7 @@
-package eu.boyo.games.duels.preferences;
+package eu.boyo.games.duels.settings;
 
 import eu.boyo.games.duels.DuelsKit;
 import eu.boyo.games.duels.StandardDuelsKit;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -40,6 +39,15 @@ public class PreferredDuelsKit implements DuelsKit {
             else if (slot == 102) inventory.setChestplate(item);
             else if (slot == 101) inventory.setLeggings(item);
             else if (slot == 100) inventory.setBoots(item);
+        }
+    }
+
+    public void giveInventoryItems(Player player) {
+        PlayerInventory inventory = player.getInventory();
+        HashMap<Integer, ItemStack> items = getItems();
+        for (int slot : items.keySet()) {
+            ItemStack item = items.get(slot);
+            if (0 <= slot && slot <= 35) inventory.setItem(slot, item);
         }
     }
 

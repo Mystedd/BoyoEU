@@ -60,9 +60,9 @@ public class ModeGUI implements InventoryHolder {
     public ModeGUI() {
         inventory = Bukkit.createInventory(this, 27, "§5§lRandom Duels");
         ItemStack pane = BuildTools.createItem(Material.MAGENTA_STAINED_GLASS_PANE, " ");
-        ItemStack effect = BuildTools.createItem(Material.POTION, "§3§rRandom Effect Duels", "§b1v1 duel with random status effects and a basic kit", true);
-        ItemStack ultimate = BuildTools.createItem(Material.SUSPICIOUS_STEW, "§6§rUltimate Random Duels", "§e1v1 duel with random items and effects", true);
-        ItemStack item = BuildTools.createItem(Material.LARGE_AMETHYST_BUD, "§2§rRandom Item Duels", "§a1v1 duel with a selection of randomised items", true);
+        ItemStack effect = BuildTools.createItem(Material.POTION, "§r§bRandom Effect Duels", "§31v1 duel with random status effects and a basic kit", true);
+        ItemStack ultimate = BuildTools.createItem(Material.SUSPICIOUS_STEW, "§r§eUltimate Random Duels", "§61v1 duel with random items and effects", true);
+        ItemStack item = BuildTools.createItem(Material.LARGE_AMETHYST_BUD, "§r§aRandom Item Duels", "§21v1 duel with a selection of randomised items", true);
         for (byte slot=0; slot<27; slot++) {
             inventory.setItem(slot, pane);
         }

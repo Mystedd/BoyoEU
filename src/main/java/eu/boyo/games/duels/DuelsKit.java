@@ -17,6 +17,8 @@ public interface DuelsKit {
 
     void giveItems(Player player);
 
+    void giveInventoryItems(Player player);
+
     void giveItems(Player player1, Player player2);
 
 }

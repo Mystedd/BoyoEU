@@ -65,7 +65,7 @@ public class QueueClickEvent implements Listener {
         }
         else if (name.contains("Custom Duels")) {
             CustomDuelsGUI gui = new CustomDuelsGUI(player);
-            player.openInventory(gui.getInventory());
+            gui.open(player);
         }
     }
 }

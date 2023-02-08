@@ -56,4 +56,18 @@ public class AllPlayerSettings {
         if (customKits == null) return null;
         return customKits.getKit(slot);
     }
+
+    public static void removeCustomKit(Player player, CustomDuelsKit kit) {
+        PlayerCustomKits customKits = playerCustomKits.get(player);
+        if (customKits == null) return;
+        customKits.removeKit(kit);
+    }
+
+    public static void addCustomKit(Player player, CustomDuelsKit kit) {
+        PlayerCustomKits customKits = playerCustomKits.get(player);
+        if (customKits == null) {
+            customKits = createPlayerCustomKits(player);
+        }
+        customKits.addKit(kit);
+    }
 }

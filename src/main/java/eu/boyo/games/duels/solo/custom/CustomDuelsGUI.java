@@ -60,8 +60,8 @@ public class CustomDuelsGUI implements InventoryHolder {
             Inventory inv = event.getInventory();
             if (!(inv.getHolder() instanceof CustomDuelsGUI)) return;
             Player player = (Player) event.getPlayer();
+            player.sendMessage("Closed CustomDuelsGUI");
             player.getInventory().clear();
-            player.sendMessage("Closed custom duels GUI");
             HandlerList.unregisterAll(this);
         }
     }
@@ -70,8 +70,6 @@ public class CustomDuelsGUI implements InventoryHolder {
 
     public CustomDuelsGUI(Player player) {
         getServer().getPluginManager().registerEvents(new CustomDuelsGUIListener(), BoyoEU.plugin);
-        PlayerInventory playerInv = player.getInventory();
-        playerInv.clear();
         inventory = Bukkit.createInventory(this, 54, "Custom Duels");
 
         // list available duels
@@ -86,6 +84,12 @@ public class CustomDuelsGUI implements InventoryHolder {
             }
             inventory.setItem(slot, logo);
         }
+    }
+
+    public void open(Player player) {
+        PlayerInventory playerInv = player.getInventory();
+        playerInv.clear();
+        player.sendMessage("Opened CustomDuelsGUI");
         // duel editor menu
         ItemStack pane = BuildTools.createItem(Material.ORANGE_STAINED_GLASS_PANE, " ");
         for (byte slot=9; slot<=35; slot++) {
@@ -102,6 +106,7 @@ public class CustomDuelsGUI implements InventoryHolder {
             }
             playerInv.setItem(invSlot, logo);
         }
+        player.openInventory(getInventory());
     }
 
     @Override

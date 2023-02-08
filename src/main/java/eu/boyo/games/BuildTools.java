@@ -9,6 +9,9 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 
@@ -65,4 +68,19 @@ public class BuildTools {
         return item;
     }
 
+    public static ItemStack createPotion(Material mat, PotionType effect) {
+        ItemStack potion = new ItemStack(mat);
+        PotionMeta data = (PotionMeta) potion.getItemMeta();
+        data.setBasePotionData(new PotionData(effect));
+        potion.setItemMeta(data);
+        return potion;
+    }
+
+    public static ItemStack createPotion(Material mat, PotionType effect, boolean extended, boolean upgraded) {
+        ItemStack potion = new ItemStack(mat);
+        PotionMeta data = (PotionMeta) potion.getItemMeta();
+        data.setBasePotionData(new PotionData(effect, extended, upgraded));
+        potion.setItemMeta(data);
+        return potion;
+    }
 }

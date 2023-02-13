@@ -62,11 +62,7 @@ public class LavaRisesGame extends Game {
         }
 
         // begin the game in 30 secs
-        getServer().getScheduler().runTaskLater(BoyoEU.plugin, new Runnable(){
-            public void run(){
-                beginGame();
-            }
-        },600L);
+        getServer().getScheduler().runTaskLater(BoyoEU.plugin, this::beginGame,600L);
     }
 
     private void beginGame() {
@@ -97,11 +93,7 @@ public class LavaRisesGame extends Game {
         }
 
         // raise the lava again in 3 secs
-        getServer().getScheduler().runTaskLater(BoyoEU.plugin, new Runnable() {
-            public void run() {
-                raiseLava();
-            }
-        }, 60L);
+        getServer().getScheduler().runTaskLater(BoyoEU.plugin, this::raiseLava, 60L);
     }
 
     private void playerLosesLife(Player player) {
@@ -131,11 +123,7 @@ public class LavaRisesGame extends Game {
         }
         player.sendTitle("§4You died!", String.format("§6%d lives remaining", livesLeft), 10, 40, 10);
 
-        getServer().getScheduler().runTaskLater(BoyoEU.plugin, new Runnable(){
-            public void run(){
-                playerRespawns(player);
-            }
-        },60L);
+        getServer().getScheduler().runTaskLater(BoyoEU.plugin, () -> playerRespawns(player),60L);
     }
 
     private void playerRespawns(Player player) {
@@ -179,11 +167,7 @@ public class LavaRisesGame extends Game {
         }
 
         // teleport back to lobby 5 secs later
-        getServer().getScheduler().runTaskLater(BoyoEU.plugin, new Runnable(){
-            public void run(){
-                killGame();
-            }
-        },100L);
+        getServer().getScheduler().runTaskLater(BoyoEU.plugin, this::killGame,100L);
     }
 
     private void killGame() {

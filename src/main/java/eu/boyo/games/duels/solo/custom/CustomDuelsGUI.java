@@ -1,7 +1,7 @@
 package eu.boyo.games.duels.solo.custom;
 
 import eu.boyo.BoyoEU;
-import eu.boyo.games.BuildTools;
+import eu.boyo.ItemTools;
 import eu.boyo.games.duels.settings.AllPlayerSettings;
 import eu.boyo.games.duels.solo.custom.editor.EditorGUI;
 import org.bukkit.Bukkit;
@@ -76,11 +76,11 @@ public class CustomDuelsGUI implements InventoryHolder {
         for (byte slot=0; slot<=53; slot++) {
             ItemStack logo;
             if (slot >= ListedCustomDuels.getSize()) {
-                logo = BuildTools.createItem(Material.BLACK_STAINED_GLASS_PANE, " ");
+                logo = ItemTools.createItem(Material.BLACK_STAINED_GLASS_PANE, " ");
             }
             else {
                 CustomDuelsKit kit = ListedCustomDuels.getKit(slot);
-                logo = BuildTools.createItem(kit.getLogo(), kit.getName());
+                logo = ItemTools.createItem(kit.getLogo(), kit.getName());
             }
             inventory.setItem(slot, logo);
         }
@@ -91,7 +91,7 @@ public class CustomDuelsGUI implements InventoryHolder {
         playerInv.clear();
         player.sendMessage("Opened CustomDuelsGUI");
         // duel editor menu
-        ItemStack pane = BuildTools.createItem(Material.ORANGE_STAINED_GLASS_PANE, " ");
+        ItemStack pane = ItemTools.createItem(Material.ORANGE_STAINED_GLASS_PANE, " ");
         for (byte slot=9; slot<=35; slot++) {
             playerInv.setItem(slot, pane);
         }
@@ -99,10 +99,10 @@ public class CustomDuelsGUI implements InventoryHolder {
             CustomDuelsKit kit = AllPlayerSettings.getCustomKit(player, kitNum);
             ItemStack logo;
             if (kit == null) {
-                logo = BuildTools.createItem(Material.FIREWORK_STAR, "Create Kit");
+                logo = ItemTools.createItem(Material.FIREWORK_STAR, "Create Kit");
             }
             else {
-                logo = BuildTools.createItem(kit.getLogo(), kit.getName());
+                logo = ItemTools.createItem(kit.getLogo(), kit.getName());
             }
             playerInv.setItem(invSlot, logo);
         }

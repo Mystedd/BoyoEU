@@ -1,7 +1,7 @@
 package eu.boyo.games.duels.solo.custom.editor;
 
 import eu.boyo.BoyoEU;
-import eu.boyo.games.BuildTools;
+import eu.boyo.ItemTools;
 import eu.boyo.games.duels.settings.AllPlayerSettings;
 import eu.boyo.games.duels.solo.custom.CustomDuelsKit;
 import org.bukkit.Bukkit;
@@ -11,16 +11,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionEffect;
+import org.bukkit.Color;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Constructor;
 import java.util.*;
 
 import static org.bukkit.Bukkit.getServer;
@@ -32,9 +31,10 @@ public class EditorGUI implements InventoryHolder {
     Listener activeListener;
     static ArrayList<Integer> blockedSlots = new ArrayList<>();
     static int backSlot = 45;
-    static int saveSlot = 53;
+    static int binSlot = 53;
     static int offHandSlot = 51;
     static ArrayList<Integer> armorSlots = new ArrayList<>();
+    static HashMap<Integer, ItemStack> placeHolders = new HashMap<>();
 
     static {
         blockedSlots.add(46);
@@ -43,20 +43,17 @@ public class EditorGUI implements InventoryHolder {
         armorSlots.add(48);
         armorSlots.add(49);
         armorSlots.add(50);
-    }
-
-    private enum Screen {
-        CATEGORIES,
-        ITEMS_LIST,
-        ITEM_QUANTITY_SETTINGS,
-        ITEM_ENCHANT_SETTINGS,
-        ITEM_EFFECT_SETTINGS,
-        SETTINGS
+        placeHolders.put(47, ItemTools.createLeatherArmor(Material.LEATHER_HELMET, Color.GRAY, "Helmet", 1301, true));
+        placeHolders.put(48, ItemTools.createLeatherArmor(Material.LEATHER_CHESTPLATE, Color.GRAY, "Chestplate", 1302, true));
+        placeHolders.put(49, ItemTools.createLeatherArmor(Material.LEATHER_LEGGINGS, Color.GRAY, "Leggings", 1303, true));
+        placeHolders.put(50, ItemTools.createLeatherArmor(Material.LEATHER_BOOTS, Color.GRAY, "Boots", 1304, true));
+        placeHolders.put(51, ItemTools.createItem(Material.SHIELD, "Offhand", 1305));
     }
 
     private void clearMainSection() {
+        ItemStack blocker = ItemTools.createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, " ");
         for (int slot=0; slot<=44; slot++) {
-            inventory.clear(slot);
+            inventory.setItem(slot, blocker);
         }
     }
 
@@ -75,31 +72,39 @@ public class EditorGUI implements InventoryHolder {
             if (event.getCurrentItem() == null) return;
             if (event.getSlot() < 45) return;
             Player player = (Player) event.getWhoClicked();
-            PlayerInventory playerInv = player.getInventory();
 
             if (blockedSlots.contains(event.getSlot())) {
                 event.setCancelled(true);
+            }
+            else if (armorSlots.contains(event.getSlot()) || event.getSlot() == offHandSlot) {
+                event.setCancelled(true);
+                if (placeHolders.containsValue(event.getCurrentItem())) {
+                    if (!player.getItemOnCursor().getType().isEmpty()) {
+                        inventory.setItem(event.getSlot(), player.getItemOnCursor());
+                        player.setItemOnCursor(new ItemStack(Material.AIR));
+                    }
+                }
+                else {
+                    if (player.getItemOnCursor().getType().isEmpty()) {
+                        player.setItemOnCursor(inventory.getItem(event.getSlot()));
+                        inventory.setItem(event.getSlot(), placeHolders.get(event.getSlot()));
+                    }
+                    else {
+                        ItemStack newItem = player.getItemOnCursor();
+                        player.setItemOnCursor(inventory.getItem(event.getSlot()));
+                        inventory.setItem(event.getSlot(), newItem);
+                    }
+                }
             }
             // back button
             else if (event.getSlot() == backSlot) {
                 event.setCancelled(true);
                 openCategories();
             }
-            // save button
-            else if (event.getSlot() == saveSlot) {
+            // bin button
+            else if (event.getSlot() == binSlot) {
                 event.setCancelled(true);
-                // check that the player has not clicked with an item
-                if (player.getItemOnCursor().getType() != Material.AIR) return;
-
-                // get HashMap from new layout
-                HashMap<Integer, ItemStack> items = new HashMap<>();
-                for (int slot=0; slot <= 35; slot++) {
-                    items.put(slot, playerInv.getItem(slot));
-                }
-                items.put(104, inv.getItem(offHandSlot));
-                kit.setItems(items);
-                player.sendMessage("§2Saved kit");
-                player.closeInventory();
+                player.setItemOnCursor(new ItemStack(Material.AIR));
             }
         }
 
@@ -109,6 +114,31 @@ public class EditorGUI implements InventoryHolder {
             if (!(inv.getHolder() instanceof EditorGUI)) return;
             HandlerList.unregisterAll(activeListener);
             HandlerList.unregisterAll(this);
+            Player player = (Player) event.getPlayer();
+
+            // save kit
+            HashMap<Integer, ItemStack> items = new HashMap<>();
+            for (int slot=0; slot <= 35; slot++) {
+                items.put(slot, player.getInventory().getItem(slot));
+            }
+            // offhand and armor
+            items.put(104, inv.getItem(offHandSlot));
+            for (int slot=0, armorSlot=103; slot<=3; slot++, armorSlot--) {
+                int invSlot = armorSlots.get(slot);
+                items.put(armorSlot, inventory.getItem(invSlot));
+            }
+            kit.setItems(items);
+            player.sendMessage("§2Saved kit");
+            player.closeInventory();
+
+            event.getPlayer().getInventory().clear();
+            getServer().getScheduler().runTaskLater(BoyoEU.plugin, () -> event.getPlayer().getInventory().clear(), 1L);
+        }
+
+        @EventHandler
+        public void onDrop(PlayerDropItemEvent event) {
+            if (!(event.getPlayer().getOpenInventory().getTopInventory().getHolder() instanceof EditorGUI)) return;
+            event.setCancelled(true);
         }
     }
 
@@ -118,17 +148,27 @@ public class EditorGUI implements InventoryHolder {
         getServer().getPluginManager().registerEvents(new EditorGUIListener(), BoyoEU.plugin);
 
         // add control items
-        ItemStack pane = BuildTools.createItem(Material.BLACK_STAINED_GLASS_PANE, " ");
+        ItemStack pane = ItemTools.createItem(Material.BLACK_STAINED_GLASS_PANE, " ");
         for (int slot : blockedSlots) {
             inventory.setItem(slot, pane);
         }
-        ItemStack back = BuildTools.createItem(Material.ARROW, "§9§o<-- Back");
+        ItemStack back = ItemTools.createItem(Material.ARROW, "§9§o<-- Back", 0);
         inventory.setItem(backSlot, back);
-        ItemStack save = BuildTools.createItem(Material.ENDER_CHEST, "§2§lSave Kit");
-        inventory.setItem(saveSlot, save);
+        ItemStack bin = ItemTools.createItem(Material.BARRIER, "§4§oDelete Item", 1300);
+        inventory.setItem(binSlot, bin);
 
         // add offhand and armor items
-        inventory.setItem(offHandSlot, k.getItems().get(104));
+        for (int slot : placeHolders.keySet()) {
+            inventory.setItem(slot, placeHolders.get(slot));
+        }
+        ItemStack offHandItem = k.getItems().get(104);
+        if (offHandItem != null && !offHandItem.getType().isEmpty()) inventory.setItem(offHandSlot, offHandItem);
+        for (int slot=0, armorSlot=103; slot<=3; slot++, armorSlot--) {
+            int invSlot = armorSlots.get(slot);
+            ItemStack item = k.getItems().get(armorSlot);
+            if (item == null || item.getType().isEmpty()) continue;
+            inventory.setItem(invSlot, item);
+        }
 
         openCategories();
     }
@@ -189,14 +229,17 @@ public class EditorGUI implements InventoryHolder {
 
     private void openItemSettings(ItemStack item) {
         Material mat = item.getType();
-        if (mat.getMaxStackSize() > 1) {
-            openItemQuantitySettings(item);
-        }
-        else if (Enchantment.MENDING.canEnchantItem(new ItemStack(mat))) {
+        if (Enchantment.MENDING.canEnchantItem(new ItemStack(mat))) {
             openItemEnchantSettings(item);
         }
         else if (mat == Material.POTION || mat == Material.SPLASH_POTION || mat == Material.LINGERING_POTION) {
             openItemEffectSettings(item);
+        }
+        else if (mat == Material.TIPPED_ARROW) {
+            openTippedArrowSettings(item);
+        }
+        else if (mat.getMaxStackSize() > 1) {
+            openItemQuantitySettings(item);
         }
     }
 
@@ -308,12 +351,31 @@ public class EditorGUI implements InventoryHolder {
         PotionMeta data = (PotionMeta) item.getItemMeta();
         PotionType effect = data.getBasePotionData().getType();
 
-        inventory.setItem(21, BuildTools.createPotion(mat, effect));
+        inventory.setItem(21, ItemTools.createPotion(mat, effect));
         if (effect.isExtendable()) {
-            inventory.setItem(22, BuildTools.createPotion(mat, effect, true, false));
+            inventory.setItem(22, ItemTools.createPotion(mat, effect, true, false));
         }
         if (effect.isUpgradeable()) {
-            inventory.setItem(23, BuildTools.createPotion(mat, effect, false, true));
+            inventory.setItem(23, ItemTools.createPotion(mat, effect, false, true));
+        }
+    }
+
+    private void openTippedArrowSettings(ItemStack item) {
+        clearMainSection();
+        activateListener(new ItemSettingsListener());
+        Material mat = item.getType();
+
+        PotionMeta data = (PotionMeta) item.getItemMeta();
+        PotionType effect = data.getBasePotionData().getType();
+
+        for (short stack=4, col=2; stack<=64; stack*=2, col++) {
+            inventory.setItem(col+9, ItemTools.createPotion(mat, effect, stack));
+            if (effect.isExtendable()) {
+                inventory.setItem(col+18, ItemTools.createPotion(mat, effect, stack, true, false));
+            }
+            if (effect.isUpgradeable()) {
+                inventory.setItem(col+27, ItemTools.createPotion(mat, effect, stack, false, true));
+            }
         }
     }
 
@@ -339,7 +401,9 @@ public class EditorGUI implements InventoryHolder {
         EditorGUI gui = new EditorGUI(kit);
         player.openInventory(gui.getInventory());
         // add kit items
+        player.sendMessage("Clearing and giving items");
         player.getInventory().clear();
+        player.sendMessage(String.valueOf(kit.getItems()));
         kit.giveInventoryItems(player);
     }
 

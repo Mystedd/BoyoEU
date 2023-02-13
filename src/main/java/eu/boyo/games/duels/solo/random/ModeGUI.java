@@ -1,24 +1,18 @@
 package eu.boyo.games.duels.solo.random;
 
 import eu.boyo.BoyoEU;
-import eu.boyo.games.BuildTools;
-import eu.boyo.games.duels.StandardDuelsKit;
+import eu.boyo.ItemTools;
 import eu.boyo.games.duels.solo.SoloDuelsQueues;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
 
 import static org.bukkit.Bukkit.getServer;
 
@@ -59,10 +53,10 @@ public class ModeGUI implements InventoryHolder {
 
     public ModeGUI() {
         inventory = Bukkit.createInventory(this, 27, "§5§lRandom Duels");
-        ItemStack pane = BuildTools.createItem(Material.MAGENTA_STAINED_GLASS_PANE, " ");
-        ItemStack effect = BuildTools.createItem(Material.POTION, "§r§bRandom Effect Duels", "§31v1 duel with random status effects and a basic kit", true);
-        ItemStack ultimate = BuildTools.createItem(Material.SUSPICIOUS_STEW, "§r§eUltimate Random Duels", "§61v1 duel with random items and effects", true);
-        ItemStack item = BuildTools.createItem(Material.LARGE_AMETHYST_BUD, "§r§aRandom Item Duels", "§21v1 duel with a selection of randomised items", true);
+        ItemStack pane = ItemTools.createItem(Material.MAGENTA_STAINED_GLASS_PANE, " ");
+        ItemStack effect = ItemTools.createItem(Material.POTION, "§r§bRandom Effect Duels", "§31v1 duel with random status effects and a basic kit", true);
+        ItemStack ultimate = ItemTools.createItem(Material.SUSPICIOUS_STEW, "§r§eUltimate Random Duels", "§61v1 duel with random items and effects", true);
+        ItemStack item = ItemTools.createItem(Material.LARGE_AMETHYST_BUD, "§r§aRandom Item Duels", "§21v1 duel with a selection of randomised items", true);
         for (byte slot=0; slot<27; slot++) {
             inventory.setItem(slot, pane);
         }

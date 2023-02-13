@@ -1,12 +1,9 @@
 package eu.boyo.games.duels.solo.custom.editor;
 
-import eu.boyo.games.BuildTools;
+import eu.boyo.ItemTools;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import java.util.HashMap;
@@ -108,8 +105,7 @@ public enum EditorCategory {
                 for (PotionType effect : effects[side]) {
                     int col = 0;
                     for (Material mat : materials) {
-                        ItemStack potion = BuildTools.createPotion(mat, effect);
-                        potion.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+                        ItemStack potion = ItemTools.createPotion(mat, effect);
                         int slot = col + (row * 9) + (side * 5);
                         items.put(slot, potion);
                         col++;
@@ -126,7 +122,7 @@ public enum EditorCategory {
     private final String name;
 
     EditorCategory(int s, Material mat, String n) {
-        icon = BuildTools.createItem(mat, n);
+        icon = ItemTools.createItem(mat, n);
         icon.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         icon.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
         slot = s;

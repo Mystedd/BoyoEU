@@ -1,5 +1,6 @@
-package eu.boyo.games;
+package eu.boyo;
 
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -9,6 +10,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
@@ -16,29 +18,7 @@ import org.bukkit.potion.PotionType;
 import java.util.ArrayList;
 
 
-public class BuildTools {
-
-    public static void clone(Location minCorner, Location maxCorner, Location newCorner, Biome newBiome) {
-
-        // tx = lower northwestern coordinate of target
-        // sx = length/depth/height of target
-        // dx = lower northwestern coordinate of destination
-
-        World world = newCorner.getWorld();
-        for (int tx=minCorner.getBlockX(), dx=newCorner.getBlockX(); tx<=maxCorner.getBlockX(); tx++, dx++) {
-            for (int ty=minCorner.getBlockY(), dy=newCorner.getBlockY(); ty<=maxCorner.getBlockY(); ty++, dy++) {
-                for (int tz=minCorner.getBlockZ(), dz=newCorner.getBlockZ(); tz<=maxCorner.getBlockZ(); tz++, dz++) {
-                    Location target = new Location(world, tx, ty, tz);
-                    Location destination = new Location(world, dx, dy, dz);
-
-                    world.setBiome(destination, newBiome);
-
-                    BlockState data = world.getBlockState(target);
-                    world.setBlockData(destination, data.getBlockData());
-                }
-            }
-        }
-    }
+public class ItemTools {
 
     public static ItemStack createItem(Material mat, String name, String lore, boolean glint) {
         ItemStack item = new ItemStack(mat);
@@ -68,8 +48,21 @@ public class BuildTools {
         return item;
     }
 
+    public static ItemStack createItem(Material mat, String name, int customModelData) {
+        ItemStack item = new ItemStack(mat);
+        ItemMeta data = item.getItemMeta();
+        data.setDisplayName(name);
+        data.setCustomModelData(customModelData);
+        item.setItemMeta(data);
+        return item;
+    }
+
     public static ItemStack createPotion(Material mat, PotionType effect) {
-        ItemStack potion = new ItemStack(mat);
+        return createPotion(mat, effect, 1);
+    }
+
+    public static ItemStack createPotion(Material mat, PotionType effect, int amount) {
+        ItemStack potion = new ItemStack(mat, amount);
         PotionMeta data = (PotionMeta) potion.getItemMeta();
         data.setBasePotionData(new PotionData(effect));
         potion.setItemMeta(data);
@@ -77,10 +70,27 @@ public class BuildTools {
     }
 
     public static ItemStack createPotion(Material mat, PotionType effect, boolean extended, boolean upgraded) {
-        ItemStack potion = new ItemStack(mat);
+        return createPotion(mat, effect, 1, extended, upgraded);
+    }
+
+    public static ItemStack createPotion(Material mat, PotionType effect, int amount, boolean extended, boolean upgraded) {
+        ItemStack potion = new ItemStack(mat, amount);
         PotionMeta data = (PotionMeta) potion.getItemMeta();
         data.setBasePotionData(new PotionData(effect, extended, upgraded));
         potion.setItemMeta(data);
         return potion;
+    }
+
+    public static ItemStack createLeatherArmor(Material mat, Color color, String name, int customModelData, boolean hideFlags) {
+        ItemStack armor = new ItemStack(mat);
+        LeatherArmorMeta data = (LeatherArmorMeta) armor.getItemMeta();
+        data.setDisplayName(name);
+        data.setCustomModelData(customModelData);
+        data.setColor(color);
+        if (hideFlags) {
+            data.addItemFlags(ItemFlag.HIDE_DYE, ItemFlag.HIDE_ATTRIBUTES);
+        }
+        armor.setItemMeta(data);
+        return armor;
     }
 }

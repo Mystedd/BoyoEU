@@ -1,7 +1,7 @@
 package eu.boyo.games.duels.settings;
 
 import eu.boyo.BoyoEU;
-import eu.boyo.games.BuildTools;
+import eu.boyo.ItemTools;
 import eu.boyo.games.duels.DuelsKit;
 import eu.boyo.games.duels.StandardDuelsKit;
 import org.bukkit.Bukkit;
@@ -75,9 +75,9 @@ public class PreferencesGUI implements InventoryHolder {
         public void onClose(InventoryCloseEvent event) {
             Inventory inv = event.getInventory();
             if (!(inv.getHolder() instanceof PreferencesGUI)) return;
-            Player player = (Player) event.getPlayer();
-            player.getInventory().clear();
             HandlerList.unregisterAll(this);
+            event.getPlayer().getInventory().clear();
+            getServer().getScheduler().runTaskLater(BoyoEU.plugin, () -> event.getPlayer().getInventory().clear(), 1L);
         }
 
         @EventHandler
@@ -110,13 +110,13 @@ public class PreferencesGUI implements InventoryHolder {
 
         inventory = Bukkit.createInventory(this, 9, duelsKit.getDisplayName() + " kit");
         // add blocker items
-        ItemStack pane = BuildTools.createItem(Material.BLACK_STAINED_GLASS_PANE, " ");
+        ItemStack pane = ItemTools.createItem(Material.BLACK_STAINED_GLASS_PANE, " ");
         for (int slot : blockedSlots) {
             inventory.setItem(slot, pane);
         }
-        ItemStack reset = BuildTools.createItem(Material.BARRIER, "§4§lReset Kit");
+        ItemStack reset = ItemTools.createItem(Material.BARRIER, "§4§lReset Kit");
         inventory.setItem(resetSlot, reset);
-        ItemStack save = BuildTools.createItem(Material.ENDER_CHEST, "§2§lSave Kit");
+        ItemStack save = ItemTools.createItem(Material.ENDER_CHEST, "§2§lSave Kit");
         inventory.setItem(saveSlot, save);
         // add default kit items
         DuelsKit preferredKit = AllPlayerSettings.getPreferredKit(player, duelsKit);
